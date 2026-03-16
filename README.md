@@ -145,7 +145,7 @@ npm -v    # should be 9+
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/portfolio-app.git
+git clone https://github.com/tklmn/portfolio-app.git
 cd portfolio-app
 ```
 
