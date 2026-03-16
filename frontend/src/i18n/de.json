@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "about": "Über mich",
+    "skills": "Fähigkeiten",
+    "projects": "Projekte",
+    "blog": "Blog",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "greeting": "Hallo, ich bin",
+    "cta_work": "Meine Arbeit",
+    "cta_contact": "Kontakt",
+    "years": "Jahre"
+  },
+  "about": {
+    "title": "Über mich",
+    "subtitle": "Erfahren Sie mehr über meinen Hintergrund, meine Erfahrung und was mich antreibt",
+    "who": "Wer bin ich?",
+    "journey": "Mein Werdegang",
+    "years_exp": "Jahre Erfahrung",
+    "projects_done": "Abgeschlossene Projekte",
+    "happy_clients": "Zufriedene Kunden"
+  },
+  "skills": {
+    "title": "Fähigkeiten & Technologien",
+    "subtitle": "Technologien, mit denen ich täglich arbeite",
+    "all": "Alle"
+  },
+  "projects": {
+    "title": "Meine Projekte",
+    "subtitle": "Eine Auswahl von Projekten, die ich gebaut und beigetragen habe",
+    "show_all": "Alle Projekte anzeigen",
+    "show_featured": "Nur hervorgehobene",
+    "search": "Projekte suchen...",
+    "all_categories": "Alle Kategorien",
+    "all_technologies": "Alle Technologien",
+    "code": "Code",
+    "demo": "Demo",
+    "stars": "Sterne",
+    "no_results": "Keine Projekte entsprechen Ihren Filtern."
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Gedanken, Tutorials und Einblicke in die Webentwicklung",
+    "read_more": "Weiterlesen",
+    "min_read": "Min. Lesezeit",
+    "back": "Zurück zum Blog",
+    "no_posts": "Noch keine Beiträge.",
+    "not_found": "Beitrag nicht gefunden"
+  },
+  "contact": {
+    "title": "Kontakt aufnehmen",
+    "subtitle": "Haben Sie eine Frage oder möchten Sie zusammenarbeiten?",
+    "name": "Ihr Name",
+    "email": "Ihre E-Mail",
+    "message": "Ihre Nachricht",
+    "send": "Nachricht senden",
+    "sending": "Wird gesendet...",
+    "success": "Nachricht erfolgreich gesendet! Ich melde mich bald bei Ihnen.",
+    "error": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "location": "Standort"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten.",
+    "built_with": "Erstellt mit React, Tailwind CSS & Express"
+  },
+  "notfound": {
+    "title": "Seite nicht gefunden",
+    "text": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "back": "Zur Startseite"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "welcome": "Willkommen zurück,",
+    "overview": "Hier ist eine Übersicht Ihres Portfolios",
+    "projects": "Projekte",
+    "skills": "Fähigkeiten",
+    "messages": "Nachrichten",
+    "blog_posts": "Blogbeiträge",
+    "settings": "Einstellungen",
+    "github_import": "GitHub Import",
+    "view_site": "Seite anzeigen",
+    "logout": "Abmelden",
+    "save": "Änderungen speichern",
+    "saving": "Speichern...",
+    "saved": "Einstellungen erfolgreich gespeichert",
+    "hero_settings": "Hero-Bereich",
+    "social_settings": "Soziale Links",
+    "seo_settings": "SEO-Einstellungen",
+    "contact_settings": "Kontaktinformationen"
+  }
+}
