@@ -74,6 +74,13 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Serve frontend build in production
+const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+app.use(express.static(frontendDist));
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(frontendDist, 'index.html'));
+});
+
 // Express recognises error handlers by their arity (4 params) — next must stay even if unused.
 app.use((err, _req, res, _next) => {
   console.error(err.stack);

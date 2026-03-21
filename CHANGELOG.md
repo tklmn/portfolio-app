@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Plesk entry point (`app.js` in project root) for deployment on netcup EiWoMiSau shared hosting
+- Backend serves frontend build statically in production (catch-all route for SPA)
+- `.env.example` file for backend environment variables
+
 ---
 
 ## [1.0.0] - 2026-03-17
