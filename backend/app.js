@@ -18,15 +18,15 @@ import seoRoutes from './routes/seo.js';
 import aboutRoutes from './routes/about.js';
 import trashRoutes from './routes/trash.js';
 
-dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Fail fast — a missing JWT_SECRET causes silent crypto failures at login time.
 if (!process.env.JWT_SECRET) {
   console.error('FATAL: JWT_SECRET environment variable is not set. Set it in backend/.env before starting.');
   process.exit(1);
 }
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 app.use(helmet());
