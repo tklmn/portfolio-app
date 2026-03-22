@@ -82,7 +82,7 @@ router.post('/', authenticateToken, upload.single('image'), (req, res) => {
 
   const result = db.prepare(
     'INSERT INTO projects (title, description, tech_stack, github_url, demo_url, image, featured, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-  ).run(title, description || '', tech_stack || '', github_url || '', demo_url || '', image, featured ? 1 : 0, sort_order || 0);
+  ).run(title, description || '', tech_stack || '', github_url || '', demo_url || '', image, String(featured) === 'true' ? 1 : 0, sort_order || 0);
 
   const project = db.prepare('SELECT * FROM projects WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json(project);
@@ -115,7 +115,7 @@ router.put('/:id', validateId, authenticateToken, upload.single('image'), (req, 
     github_url ?? existing.github_url,
     demo_url ?? existing.demo_url,
     image,
-    featured !== undefined ? (featured ? 1 : 0) : existing.featured,
+    featured !== undefined ? (String(featured) === 'true' ? 1 : 0) : existing.featured,
     sort_order ?? existing.sort_order,
     req.params.id
   );

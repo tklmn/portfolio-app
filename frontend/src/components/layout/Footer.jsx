@@ -36,7 +36,6 @@ export default function Footer() {
           <div className="text-center text-sm text-gray-500 dark:text-gray-500">
             <p>{ts('footer_copyright') || `\u00A9 ${new Date().getFullYear()} Portfolio. ${t('footer.rights')}`}</p>
             {ts('footer_subline') && <p className="mt-1">{ts('footer_subline')}</p>}
-            {!ts('footer_subline') && <p className="mt-1">{t('footer.built_with')}</p>}
           </div>
         </div>
       </div>
