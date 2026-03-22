@@ -67,7 +67,7 @@ export default function BlogPostPage() {
           url={`${baseUrl}/blog/${post.slug}`}
           datePublished={post.created_at}
           dateModified={post.updated_at}
-          author={settings?.hero_name || 'Author'}
+          author={settings?.hero_name || ''}
         />
       )}
 

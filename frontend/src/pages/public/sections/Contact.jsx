@@ -37,24 +37,26 @@ export default function Contact() {
 
         <div ref={ref} className={`grid lg:grid-cols-5 gap-12 max-w-5xl mx-auto transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-500"><FiMail size={24} /></div>
-              <div>
-                <h3 className="font-medium text-gray-900 dark:text-white">Email</h3>
-                {settings?.contact_email && (
+            {settings?.contact_email && (
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-500"><FiMail size={24} /></div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white">{t('contact.email')}</h3>
                   <a href={`mailto:${settings.contact_email}`} className="text-gray-600 dark:text-gray-400 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
                     {settings.contact_email}
                   </a>
-                )}
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-500"><FiMapPin size={24} /></div>
-              <div>
-                <h3 className="font-medium text-gray-900 dark:text-white">{t('contact.location')}</h3>
-                {settings?.contact_location && <p className="text-gray-600 dark:text-gray-400 text-sm">{settings.contact_location}</p>}
+            )}
+            {settings?.contact_location && (
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-500"><FiMapPin size={24} /></div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white">{t('contact.location')}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">{settings.contact_location}</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-4">

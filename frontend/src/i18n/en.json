@@ -65,6 +65,9 @@
     "rights": "All rights reserved.",
     "built_with": "Built with React, Tailwind CSS & Express"
   },
+  "errors": {
+    "load_failed": "Failed to load content."
+  },
   "notfound": {
     "title": "Page Not Found",
     "text": "The page you're looking for doesn't exist or has been moved.",

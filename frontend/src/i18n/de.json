@@ -65,6 +65,9 @@
     "rights": "Alle Rechte vorbehalten.",
     "built_with": "Erstellt mit React, Tailwind CSS & Express"
   },
+  "errors": {
+    "load_failed": "Inhalte konnten nicht geladen werden."
+  },
   "notfound": {
     "title": "Seite nicht gefunden",
     "text": "Die gesuchte Seite existiert nicht oder wurde verschoben.",

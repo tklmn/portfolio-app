@@ -92,7 +92,7 @@ export default function Hero() {
                   {settings?.hero_image ? (
                     <img
                       src={settings.hero_image}
-                      alt={settings?.hero_name || 'Profile'}
+                      alt={settings?.hero_name || ''}
                       className="w-full h-full object-cover"
                     />
                   ) : (

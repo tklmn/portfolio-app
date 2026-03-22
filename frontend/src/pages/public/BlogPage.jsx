@@ -35,7 +35,7 @@ export default function BlogPage() {
   const { currentPage: safePage, setCurrentPage, totalPages, paginatedItems: paginatedPosts } = usePagination(filtered, perPage, { mode: 'url' });
 
   if (loading) return <div className="pt-24"><LoadingSpinner /></div>;
-  if (error) return <div className="pt-24 text-center text-gray-500 dark:text-gray-400">{t('errors.load_failed') || 'Failed to load content.'}</div>;
+  if (error) return <div className="pt-24 text-center text-gray-500 dark:text-gray-400">{t('errors.load_failed')}</div>;
 
   return (
     <div className="pt-24 pb-20 min-h-screen">

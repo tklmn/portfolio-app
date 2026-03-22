@@ -35,7 +35,7 @@ export default function HomePage() {
   return (
     <>
       <SEOHead
-        title={settings?.seo_title || 'Portfolio'}
+        title={settings?.seo_title || ''}
         description={settings?.seo_description}
         keywords={settings?.seo_keywords}
         image={settings?.seo_image}
@@ -43,7 +43,7 @@ export default function HomePage() {
       />
       {settings?.site_url && (
         <WebSiteJsonLd
-          name={settings?.hero_name || 'Portfolio'}
+          name={settings?.hero_name || ''}
           url={settings?.site_url}
           description={settings?.seo_description}
         />
