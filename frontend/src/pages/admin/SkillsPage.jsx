@@ -51,7 +51,12 @@ function SortableRow({ skill, onEdit, onDelete }) {
           <HiMiniArrowsUpDown size={16} />
         </button>
       </td>
-      <td className="px-4 py-4 font-medium text-gray-900 dark:text-white">{skill.name}</td>
+      <td className="px-4 py-4 font-medium text-gray-900 dark:text-white">
+        <div className="flex items-center gap-2">
+          {skill.icon && <Icon icon={skill.icon} width={18} height={18} className="text-gray-500 dark:text-gray-400 shrink-0" />}
+          {skill.name}
+        </div>
+      </td>
       <td className="px-4 py-4 text-gray-500 dark:text-gray-400 hidden sm:table-cell">
         <span className="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-800">{skill.category}</span>
       </td>

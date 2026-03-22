@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Admin skills table now shows iconify icon next to skill name
+
 ---
 
 ## [1.5.0] - 2026-03-22
