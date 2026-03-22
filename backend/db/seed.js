@@ -184,7 +184,7 @@ const settings = {
   'seo_description': 'Full-stack web developer specializing in React, Node.js, and modern web technologies. View my projects and get in touch.',
   'seo_keywords': 'web developer, full-stack, react, node.js, portfolio',
   'seo_image': '',
-  'site_url': 'https://johndeveloper.com',
+  'site_url': '',
   'github_username': '',
   'contact_email': 'hello@portfolio.com',
   'contact_location': 'San Francisco, CA',

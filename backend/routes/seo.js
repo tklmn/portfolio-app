@@ -17,7 +17,11 @@ function escapeXml(str) {
 router.get('/sitemap.xml', (req, res) => {
   const db = getDb();
   const settings = loadSettings(db);
-  const baseUrl = settings.site_url || 'https://localhost:5173';
+  const baseUrl = settings.site_url;
+  if (!baseUrl) {
+    res.set('Content-Type', 'application/xml');
+    return res.send('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>');
+  }
 
   const posts = db.prepare(
     'SELECT slug, updated_at FROM posts WHERE published = 1 AND deleted_at IS NULL'
@@ -44,7 +48,7 @@ router.get('/sitemap.xml', (req, res) => {
 router.get('/robots.txt', (req, res) => {
   const db = getDb();
   const settings = loadSettings(db);
-  const baseUrl = settings.site_url || 'https://localhost:5173';
+  const baseUrl = settings.site_url;
   const allowIndexing = settings.robots_allow_indexing !== 'false';
 
   const lines = ['User-agent: *'];
@@ -54,16 +58,16 @@ router.get('/robots.txt', (req, res) => {
   } else {
     lines.push('Allow: /');
     // Parse custom disallowed paths (one per line), always include /admin
-    const customPaths = (settings.robots_disallow_paths || '/admin')
-      .split('\n')
-      .map((p) => p.trim())
-      .filter(Boolean);
+    const raw = settings.robots_disallow_paths || '';
+    const customPaths = raw.split('\n').map((p) => p.trim()).filter(Boolean);
     const disallowed = new Set(customPaths);
     disallowed.add('/admin');
     for (const p of disallowed) {
       lines.push(`Disallow: ${p}`);
     }
-    lines.push('', `Sitemap: ${baseUrl}/sitemap.xml`);
+    if (baseUrl) {
+      lines.push('', `Sitemap: ${baseUrl}/sitemap.xml`);
+    }
   }
 
   res.set('Content-Type', 'text/plain');
