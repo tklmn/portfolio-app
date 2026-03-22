@@ -27,12 +27,27 @@ export default function Navbar() {
   ];
   const navLinks = allNavLinks.filter((link) => isOn(link.section));
 
+  const [activeSection, setActiveSection] = useState('#home');
+
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+
+      // Detect active section
+      if (location.pathname === '/') {
+        const sections = navLinks.filter((l) => l.href.startsWith('#')).map((l) => l.href.slice(1));
+        let current = '#home';
+        for (const id of sections) {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top <= 150) current = `#${id}`;
+        }
+        setActiveSection(current);
+      }
+    };
     // passive: true lets the browser optimise scrolling without waiting for this handler.
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname, navLinks]);
 
   const handleNavClick = (href) => {
     setIsOpen(false);
@@ -72,25 +87,25 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) =>
-              link.href.startsWith('/') ? (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                >
+            {navLinks.map((link) => {
+              const isActive = link.href.startsWith('/')
+                ? location.pathname === link.href
+                : location.pathname === '/' && activeSection === link.href;
+              const cls = `px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive
+                  ? 'bg-gray-100 dark:bg-gray-800 text-blue-600 dark:text-white'
+                  : 'text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`;
+              return link.href.startsWith('/') ? (
+                <Link key={link.name} to={link.href} className={cls}>
                   {link.name}
                 </Link>
               ) : (
-                <button
-                  key={link.name}
-                  onClick={() => handleNavClick(link.href)}
-                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                >
+                <button key={link.name} onClick={() => handleNavClick(link.href)} className={cls}>
                   {link.name}
                 </button>
-              )
-            )}
+              );
+            })}
             <select
               value={language}
               onChange={(e) => switchLanguage(e.target.value)}
@@ -133,26 +148,25 @@ export default function Navbar() {
         {/* Mobile Navigation */}
         {isOpen && (
           <div className="md:hidden pb-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-b-xl">
-            {navLinks.map((link) =>
-              link.href.startsWith('/') ? (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                >
+            {navLinks.map((link) => {
+              const isActive = link.href.startsWith('/')
+                ? location.pathname === link.href
+                : location.pathname === '/' && activeSection === link.href;
+              const cls = `block w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                isActive
+                  ? 'bg-gray-100 dark:bg-gray-800 text-blue-600 dark:text-white'
+                  : 'text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`;
+              return link.href.startsWith('/') ? (
+                <Link key={link.name} to={link.href} onClick={() => setIsOpen(false)} className={cls}>
                   {link.name}
                 </Link>
               ) : (
-                <button
-                  key={link.name}
-                  onClick={() => handleNavClick(link.href)}
-                  className="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                >
+                <button key={link.name} onClick={() => handleNavClick(link.href)} className={cls}>
                   {link.name}
                 </button>
-              )
-            )}
+              );
+            })}
           </div>
         )}
       </div>

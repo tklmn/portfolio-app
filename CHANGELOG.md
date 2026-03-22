@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Admin skills table now shows iconify icon next to skill name
+- Active navigation state with scroll-based section detection on public site
+- Dark mode: active and hover nav links now use white text (public + admin)
 
 ---
 
