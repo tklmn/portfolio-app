@@ -144,25 +144,23 @@ function HeroImageField({ settings, setSettings, addToast }) {
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Image</label>
-      {currentImage ? (
-        <div className="flex items-center gap-4">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Profile Image</label>
+      {currentImage && (
+        <div className="flex items-center gap-4 mb-2">
           <img src={currentImage} alt="Profile" className="w-20 h-20 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700" />
-          <div className="flex gap-2">
-            <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading} className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50">
-              <HiUpload size={14} /> Replace
-            </button>
-            <button type="button" onClick={handleRemove} className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-              <HiX size={14} /> Remove
-            </button>
-          </div>
+          <button type="button" onClick={handleRemove} className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+            <HiX size={14} /> Remove
+          </button>
         </div>
-      ) : (
-        <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading} className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 rounded-lg text-sm hover:border-blue-500 hover:text-blue-500 transition-colors disabled:opacity-50 w-full justify-center">
-          <HiUpload size={18} /> {uploading ? 'Uploading...' : 'Upload Image'}
-        </button>
       )}
-      <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/gif,image/webp" onChange={handleUpload} className="hidden" />
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        onChange={handleUpload}
+        disabled={uploading}
+        className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-600 dark:file:text-blue-400"
+      />
     </div>
   );
 }
