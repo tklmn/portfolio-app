@@ -16,11 +16,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Skill level range validation (0–100) on create and update
 - Error states on public pages — Skills, Projects, and Blog now handle API failures gracefully
 - Shared `displayName` utility extracted from four admin pages into `utils/displayName.js`
+- `errors.load_failed` translation key for EN and DE
+- `blog_show_date` and `blog_show_reading_time` seed defaults
 
 ### Fixed
 - Timing attack on login — `bcrypt.compareSync` now always runs even when the user is not found
 - `useScrollReveal` dependency array — removed `isVisible` from `useCallback` deps to prevent stale closure
 - Honeypot response now returns a randomized fake ID instead of a fixed value
+- All remaining hardcoded fallback text removed from public pages — empty fields now display nothing instead of `'Portfolio'`, `'Author'`, `'Profile'`, `'Email'`, or `'Failed to load content.'`
+- Contact section hides email and location blocks entirely when their settings are empty
+- `social_twitter` → `social_x` reference in HomePage JSON-LD
+- robots.txt no longer outputs `Sitemap:` line when `site_url` is empty
+- sitemap.xml returns empty sitemap when `site_url` is not configured
+- Seeder `site_url` set to empty — users must configure their own domain
 
 ### Improved
 - `aria-label` added to language selector dropdowns in `I18nField` and `SettingsI18nField`

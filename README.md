@@ -283,7 +283,7 @@ Enable or disable entire sections of the public site. When a section is disabled
 | `seo_title` | Browser tab title for the homepage |
 | `seo_description` | Meta description used by search engines |
 | `seo_keywords` | Comma-separated keywords |
-| `site_url` | Full URL of your site, e.g. `https://yourname.dev` — used for Open Graph, JSON-LD, and the sitemap |
+| `site_url` | Full URL of your site, e.g. `https://yourname.dev` — used for Open Graph, JSON-LD, sitemap, and robots.txt. **Must be set** for sitemap and robots Sitemap line to work |
 
 #### Robots / Crawling
 
