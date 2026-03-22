@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { HiOutlineCollection, HiOutlineLightningBolt, HiOutlineMail, HiOutlineDocumentText, HiOutlineCog, HiOutlineEye } from 'react-icons/hi';
 import { FiExternalLink, FiClock, FiMail, FiAlertCircle } from 'react-icons/fi';
+import { displayName } from '../../utils/displayName';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -53,12 +54,6 @@ export default function DashboardPage() {
     purple: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
     green: 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400',
     orange: 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400',
-  };
-
-  // Parse JSON title for display
-  const displayTitle = (val) => {
-    if (!val) return '';
-    try { const p = JSON.parse(val); return p.en || p[Object.keys(p)[0]] || val; } catch { return val; }
   };
 
   return (
@@ -150,7 +145,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{displayTitle(post.title)}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{displayName(post.title)}</p>
                       <span className={`text-xs px-1.5 py-0.5 rounded-full flex-shrink-0 ${post.published ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400'}`}>
                         {post.published ? 'Published' : 'Draft'}
                       </span>

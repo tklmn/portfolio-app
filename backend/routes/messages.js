@@ -31,12 +31,16 @@ router.post('/', contactLimiter, (req, res) => {
 
   // Honeypot — if filled, silently reject (bots only)
   if (website) {
-    return res.status(201).json({ id: 0, message: 'Message sent successfully' });
+    return res.status(201).json({ id: Math.floor(Math.random() * 1000), message: 'Message sent successfully' });
   }
 
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Name, email, and message are required' });
   }
+
+  if (String(name).length > 200) return res.status(400).json({ error: 'Name exceeds maximum length' });
+  if (String(email).length > 254) return res.status(400).json({ error: 'Email exceeds maximum length' });
+  if (String(message).length > 5000) return res.status(400).json({ error: 'Message exceeds maximum length' });
 
   // Basic email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

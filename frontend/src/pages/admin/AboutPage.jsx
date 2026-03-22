@@ -14,15 +14,7 @@ import I18nField from '../../components/ui/I18nField';
 import SettingsI18nField from '../../components/ui/SettingsI18nField';
 import { HiPlus, HiPencil, HiTrash, HiX } from 'react-icons/hi';
 import { HiMiniArrowsUpDown } from 'react-icons/hi2';
-
-// Parse JSON i18n value, return first language or raw string for display
-function displayName(val) {
-  if (!val) return '';
-  try {
-    const parsed = JSON.parse(val);
-    return parsed.en || parsed[Object.keys(parsed)[0]] || val;
-  } catch { return val; }
-}
+import { displayName } from '../../utils/displayName';
 
 function SortableRow({ entry, onEdit, onDelete, dragEnabled }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: entry.id, disabled: !dragEnabled });

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db/init.js';
 import { authenticateToken } from '../middleware/auth.js';
-import { validateId } from '../middleware/validate.js';
+import { validateId, validateFields } from '../middleware/validate.js';
 
 const router = Router();
 
@@ -12,10 +12,15 @@ router.get('/', (req, res) => {
   res.json(skills);
 });
 
+const skillLimits = validateFields({ name: 200, category: 200, icon: 100 });
+
 // POST create skill (admin)
-router.post('/', authenticateToken, (req, res) => {
+router.post('/', authenticateToken, skillLimits, (req, res) => {
   const { name, category, level, icon, sort_order } = req.body;
   if (!name) return res.status(400).json({ error: 'Skill name is required' });
+  if (level !== undefined && (Number(level) < 0 || Number(level) > 100)) {
+    return res.status(400).json({ error: 'Level must be between 0 and 100' });
+  }
 
   const db = getDb();
   const result = db.prepare(
@@ -27,8 +32,11 @@ router.post('/', authenticateToken, (req, res) => {
 });
 
 // PUT update skill (admin)
-router.put('/:id', validateId, authenticateToken, (req, res) => {
+router.put('/:id', validateId, authenticateToken, skillLimits, (req, res) => {
   const { name, category, level, icon, sort_order } = req.body;
+  if (level !== undefined && (Number(level) < 0 || Number(level) > 100)) {
+    return res.status(400).json({ error: 'Level must be between 0 and 100' });
+  }
   const db = getDb();
   const existing = db.prepare('SELECT * FROM skills WHERE id = ? AND deleted_at IS NULL').get(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Skill not found' });

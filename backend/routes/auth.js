@@ -16,7 +16,10 @@ router.post('/login', (req, res) => {
   const db = getDb();
   const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
 
-  if (!user || !bcrypt.compareSync(password, user.password)) {
+  // Always run bcrypt to prevent timing-based user enumeration
+  const dummy = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p19WOu9Nc/PeM39OWzu5ei';
+  const valid = bcrypt.compareSync(password, user?.password || dummy);
+  if (!user || !valid) {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
 

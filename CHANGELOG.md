@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-03-22
+
+### Added
+- Input length validation on all backend routes (projects, skills, about, posts, messages) via shared `validateFields` middleware
+- Skill level range validation (0–100) on create and update
+- Error states on public pages — Skills, Projects, and Blog now handle API failures gracefully
+- Shared `displayName` utility extracted from four admin pages into `utils/displayName.js`
+
+### Fixed
+- Timing attack on login — `bcrypt.compareSync` now always runs even when the user is not found
+- `useScrollReveal` dependency array — removed `isVisible` from `useCallback` deps to prevent stale closure
+- Honeypot response now returns a randomized fake ID instead of a fixed value
+
+### Improved
+- `aria-label` added to language selector dropdowns in `I18nField` and `SettingsI18nField`
+- Conditional error logging — production shows only error message, development shows full stack trace
+
+---
+
 ## [1.2.0] - 2026-03-22
 
 ### Added

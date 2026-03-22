@@ -85,7 +85,7 @@ Everything is manageable through a protected admin dashboard. No external CMS or
 - **Drag-and-Drop** — reorder projects and skills via @dnd-kit in admin panel
 - **Pagination** — `usePagination` hook with URL, sessionStorage, and state modes; per-page count configurable via Settings
 - **Sitemap & Robots.txt** — auto-generated from database content; XML values entity-escaped; trashed content excluded
-- **Security** — Helmet headers, CORS validation, rate limiting, input validation, XSS sanitization, startup guard for missing `JWT_SECRET`, settings key/value length limits, GitHub proxy protected by auth
+- **Security** — Helmet headers, CORS validation, rate limiting, input length validation on all routes, XSS sanitization, timing-safe login, startup guard for missing `JWT_SECRET`, settings key/value length limits, GitHub proxy protected by auth
 - **Soft Delete / Trash** — all content types support trash with restore and permanent delete; `deleted_at` column, no data is lost on first delete
 - **Tests** — Vitest unit tests (frontend hooks) and integration tests (backend API)
 - **Performance** — shared settings cache across all consumers (one network request per page load); passive scroll listeners
@@ -442,6 +442,8 @@ portfolio-app/
         │   ├── useSettings.js      # Fetches and caches site settings; exports getSettingsCached()
         │   ├── useScrollReveal.js  # IntersectionObserver scroll animations
         │   └── useTranslateJson.js # Translates i18n JSON field values
+        ├── utils/
+        │   └── displayName.js     # Parse i18n JSON values for admin display
         ├── components/
         │   ├── layout/
         │   │   ├── Navbar.jsx      # Sticky navbar with section links + toggles

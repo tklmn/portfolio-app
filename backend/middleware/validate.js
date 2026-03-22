@@ -12,12 +12,29 @@ export function validateId(req, res, next) {
   next();
 }
 
-// Validate string length limits
+// Validate string length limits (single field)
 export function maxLength(field, max) {
   return (req, res, next) => {
     const value = req.body[field];
     if (typeof value === 'string' && value.length > max) {
       return res.status(400).json({ error: `${field} exceeds maximum length of ${max}` });
+    }
+    next();
+  };
+}
+
+/**
+ * Validate multiple fields at once.
+ * Usage: validateFields({ title: 300, content: 100000, email: 254 })
+ * Returns 400 if any field exceeds its limit.
+ */
+export function validateFields(limits) {
+  return (req, res, next) => {
+    for (const [field, max] of Object.entries(limits)) {
+      const value = req.body?.[field];
+      if (typeof value === 'string' && value.length > max) {
+        return res.status(400).json({ error: `${field} exceeds maximum length of ${max}` });
+      }
     }
     next();
   };

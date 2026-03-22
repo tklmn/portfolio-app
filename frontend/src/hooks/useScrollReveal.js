@@ -29,7 +29,7 @@ export function useScrollReveal(options = {}) {
 
       observerRef.current.observe(node);
     },
-    [isVisible, options.threshold, options.rootMargin]
+    [options.threshold, options.rootMargin]
   );
 
   // Cleanup on unmount

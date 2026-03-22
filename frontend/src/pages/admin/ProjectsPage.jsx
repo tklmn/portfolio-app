@@ -23,11 +23,7 @@ import { HiPlus, HiPencil, HiTrash, HiX } from 'react-icons/hi';
 import { HiMiniArrowsUpDown } from 'react-icons/hi2';
 import { useToast } from '../../components/ui/Toast';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
-
-function displayName(val) {
-  if (!val) return '';
-  try { const p = JSON.parse(val); return p.en || p[Object.keys(p)[0]] || val; } catch { return val; }
-}
+import { displayName } from '../../utils/displayName';
 
 const emptyForm = {
   title: '', description: '', tech_stack: '', github_url: '', demo_url: '', category: '', featured: false, sort_order: 0,

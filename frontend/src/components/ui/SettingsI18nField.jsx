@@ -23,6 +23,7 @@ export default function SettingsI18nField({ settingsKey, settings, onChange, lan
           value={activeLang}
           onChange={(e) => setActiveLang(e.target.value)}
           className="px-2 py-1 text-xs font-medium rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 uppercase"
+          aria-label="Select language"
         >
           {languages.map((lang) => (
             <option key={lang} value={lang}>{lang.toUpperCase()}</option>

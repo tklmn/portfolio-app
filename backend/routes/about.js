@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db/init.js';
 import { authenticateToken } from '../middleware/auth.js';
-import { validateId } from '../middleware/validate.js';
+import { validateId, validateFields } from '../middleware/validate.js';
 
 const router = Router();
 
@@ -29,8 +29,10 @@ router.get('/timeline', (req, res) => {
   res.json(entries);
 });
 
+const timelineLimits = validateFields({ year: 50, title: 300, company: 300, description: 2000 });
+
 // POST create timeline entry (admin)
-router.post('/timeline', authenticateToken, (req, res) => {
+router.post('/timeline', authenticateToken, timelineLimits, (req, res) => {
   const { year, title, company, description, icon, sort_order } = req.body;
   if (!year || !title || !company) {
     return res.status(400).json({ error: 'Year, title, and company are required' });
@@ -46,7 +48,7 @@ router.post('/timeline', authenticateToken, (req, res) => {
 });
 
 // PUT update timeline entry (admin)
-router.put('/timeline/:id', validateId, authenticateToken, (req, res) => {
+router.put('/timeline/:id', validateId, authenticateToken, timelineLimits, (req, res) => {
   const { year, title, company, description, icon, sort_order } = req.body;
   const db = getDb();
   const existing = db.prepare('SELECT * FROM timeline WHERE id = ?').get(req.params.id);

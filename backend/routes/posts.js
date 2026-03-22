@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db/init.js';
 import { authenticateToken } from '../middleware/auth.js';
-import { validateId } from '../middleware/validate.js';
+import { validateId, validateFields } from '../middleware/validate.js';
 
 const router = Router();
 
@@ -66,8 +66,10 @@ function extractText(val) {
   try { const p = JSON.parse(val); return p.en || p[Object.keys(p)[0]] || val; } catch { return val; }
 }
 
+const postLimits = validateFields({ title: 300, slug: 300, content: 100000, excerpt: 1000 });
+
 // POST create post (admin)
-router.post('/', authenticateToken, (req, res) => {
+router.post('/', authenticateToken, postLimits, (req, res) => {
   const { title, slug, content, excerpt, published } = req.body;
   if (!title) return res.status(400).json({ error: 'Title is required' });
 
@@ -107,7 +109,7 @@ router.post('/', authenticateToken, (req, res) => {
 });
 
 // PUT update post (admin)
-router.put('/:id', validateId, authenticateToken, (req, res) => {
+router.put('/:id', validateId, authenticateToken, postLimits, (req, res) => {
   const { title, slug, content, excerpt, published } = req.body;
   const db = getDb();
   const existing = db.prepare('SELECT * FROM posts WHERE id = ? AND deleted_at IS NULL').get(req.params.id);

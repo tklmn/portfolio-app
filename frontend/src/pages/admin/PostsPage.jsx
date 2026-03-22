@@ -6,13 +6,9 @@ import { HiPlus, HiPencil, HiTrash, HiX, HiEye, HiEyeOff } from 'react-icons/hi'
 import { useToast } from '../../components/ui/Toast';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
 import I18nField from '../../components/ui/I18nField';
+import { displayName } from '../../utils/displayName';
 
 const emptyForm = { title: '', slug: '', content: '', excerpt: '', tags: '', published: false };
-
-function displayName(val) {
-  if (!val) return '';
-  try { const p = JSON.parse(val); return p.en || p[Object.keys(p)[0]] || val; } catch { return val; }
-}
 
 export default function PostsPage() {
   const [posts, setPosts] = useState([]);

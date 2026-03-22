@@ -34,6 +34,7 @@ const iconMap = {
 export default function Skills() {
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [activeCategory, setActiveCategory] = useState('All');
   const { t } = useLanguage();
   const { ref, isVisible } = useScrollReveal();
@@ -42,10 +43,11 @@ export default function Skills() {
     api.get('/skills').then((res) => {
       setSkills(res.data);
       setLoading(false);
-    }).catch(() => setLoading(false));
+    }).catch(() => { setError(true); setLoading(false); });
   }, []);
 
   if (loading) return <LoadingSpinner />;
+  if (error || skills.length === 0) return null;
 
   const categories = ['All', ...new Set(skills.map((s) => s.category).filter(Boolean))];
   const filtered = activeCategory === 'All' ? skills : skills.filter((s) => s.category === activeCategory);

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { getDb } from '../db/init.js';
 import { authenticateToken } from '../middleware/auth.js';
-import { validateId } from '../middleware/validate.js';
+import { validateId, validateFields } from '../middleware/validate.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const router = Router();
@@ -76,6 +76,10 @@ router.get('/:id', validateId, (req, res) => {
 router.post('/', authenticateToken, upload.single('image'), (req, res) => {
   const { title, description, tech_stack, github_url, demo_url, featured, sort_order } = req.body;
   if (!title) return res.status(400).json({ error: 'Title is required' });
+  if (String(title).length > 300) return res.status(400).json({ error: 'Title exceeds maximum length' });
+  if (String(description || '').length > 5000) return res.status(400).json({ error: 'Description exceeds maximum length' });
+  if (String(github_url || '').length > 500) return res.status(400).json({ error: 'URL exceeds maximum length' });
+  if (String(demo_url || '').length > 500) return res.status(400).json({ error: 'URL exceeds maximum length' });
 
   const db = getDb();
   const image = req.file ? `/uploads/projects/${req.file.filename}` : null;
@@ -91,6 +95,10 @@ router.post('/', authenticateToken, upload.single('image'), (req, res) => {
 // PUT update project (admin)
 router.put('/:id', validateId, authenticateToken, upload.single('image'), (req, res) => {
   const { title, description, tech_stack, github_url, demo_url, featured, sort_order } = req.body;
+  if (String(title || '').length > 300) return res.status(400).json({ error: 'Title exceeds maximum length' });
+  if (String(description || '').length > 5000) return res.status(400).json({ error: 'Description exceeds maximum length' });
+  if (String(github_url || '').length > 500) return res.status(400).json({ error: 'URL exceeds maximum length' });
+  if (String(demo_url || '').length > 500) return res.status(400).json({ error: 'URL exceeds maximum length' });
   const db = getDb();
   const existing = db.prepare('SELECT * FROM projects WHERE id = ? AND deleted_at IS NULL').get(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Project not found' });

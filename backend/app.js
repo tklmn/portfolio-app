@@ -89,7 +89,11 @@ app.get('*', (_req, res) => {
 
 // Express recognises error handlers by their arity (4 params) — next must stay even if unused.
 app.use((err, _req, res, _next) => {
-  console.error(err.stack);
+  if (process.env.NODE_ENV === 'production') {
+    console.error('Error:', err.message);
+  } else {
+    console.error(err.stack);
+  }
   res.status(500).json({ error: 'Something went wrong' });
 });
 

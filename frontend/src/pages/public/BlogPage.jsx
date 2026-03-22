@@ -13,6 +13,7 @@ import { FiCalendar, FiArrowRight, FiClock } from 'react-icons/fi';
 export default function BlogPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [activeTag, setActiveTag] = useState('');
   const { t, formatDate } = useLanguage();
   const { settings } = useSettings();
@@ -22,7 +23,7 @@ export default function BlogPage() {
     api.get('/posts').then((res) => {
       setPosts(res.data);
       setLoading(false);
-    }).catch(() => setLoading(false));
+    }).catch(() => { setError(true); setLoading(false); });
   }, []);
 
   const allTags = [...new Set(posts.flatMap((p) => (p.tagList || []).map((tag) => tag.name)))].sort();
@@ -34,6 +35,7 @@ export default function BlogPage() {
   const { currentPage: safePage, setCurrentPage, totalPages, paginatedItems: paginatedPosts } = usePagination(filtered, perPage, { mode: 'url' });
 
   if (loading) return <div className="pt-24"><LoadingSpinner /></div>;
+  if (error) return <div className="pt-24 text-center text-gray-500 dark:text-gray-400">{t('errors.load_failed') || 'Failed to load content.'}</div>;
 
   return (
     <div className="pt-24 pb-20 min-h-screen">

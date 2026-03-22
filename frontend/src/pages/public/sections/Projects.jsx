@@ -13,6 +13,7 @@ import { FiGithub, FiExternalLink, FiSearch, FiStar } from 'react-icons/fi';
 export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [search, setSearch] = useState('');
   const [techFilter, setTechFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
@@ -25,7 +26,7 @@ export default function Projects() {
     api.get('/projects').then((res) => {
       setProjects(res.data);
       setLoading(false);
-    }).catch(() => setLoading(false));
+    }).catch(() => { setError(true); setLoading(false); });
   }, []);
 
   // Extract unique techs and categories for filter dropdowns
@@ -70,6 +71,7 @@ export default function Projects() {
   const setCategoryAndReset = (v) => { setCategoryFilter(v); setCurrentPage(1); };
 
   if (loading) return <LoadingSpinner />;
+  if (error) return null;
 
   const hasFilters = search || techFilter || categoryFilter;
 
