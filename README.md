@@ -229,6 +229,7 @@ All backend configuration lives in `backend/.env`:
 | `PORT` | `5000` | No | Port the Express server listens on |
 | `JWT_SECRET` | — | **Yes** | Secret key used to sign JWTs. Must be a long random string in production. Generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. The server **will not start** if this is missing. |
 | `CORS_ORIGIN` | `http://localhost:5173` | No | Comma-separated list of allowed frontend origins. Set to your production domain when deploying |
+| `NODE_ENV` | `development` | No | Set to `production` on your server to disable development-only behaviour |
 
 ### Site Settings (Admin Panel)
 
@@ -385,6 +386,7 @@ npm run test:frontend
 ```
 portfolio-app/
 ├── package.json                    # Root scripts: dev, seed, build, test
+├── app.js                          # Plesk entry point — delegates to backend/app.js
 │
 ├── backend/
 │   ├── server.js                   # Entry point — starts Express on PORT
@@ -646,7 +648,33 @@ server {
 
 Use [Certbot](https://certbot.eff.org) to add HTTPS.
 
-### Option 2: Docker
+### Option 2: Plesk Shared Hosting (e.g. netcup EiWoMiSau)
+
+Plesk uses Phusion Passenger to run Node.js apps. The root `app.js` serves as the entry point — it starts the Express backend which serves both the API and the built frontend.
+
+1. Upload the project to the server via SFTP (or clone from Git)
+2. In Plesk, set the **Node.js version** to 20, 22, or 24 (LTS recommended)
+3. Set **Application Startup File** to `app.js`
+4. Run `install:all` via Plesk "Run Script" to install dependencies
+5. Run `build` to build the frontend
+6. Run `seed` to create the database and default admin account
+7. Create `backend/.env` on the server:
+
+```env
+PORT=3000
+JWT_SECRET=your-strong-random-secret-here
+CORS_ORIGIN=https://yourdomain.com
+NODE_ENV=production
+```
+
+8. Set `NODE_ENV` to `production` in the Plesk environment variables
+9. Click **Restart App**
+
+The app is now accessible at your domain. Admin panel at `/admin/login`.
+
+> **Note:** `better-sqlite3` is a native module. Do **not** upload `node_modules` from your local machine — always run `install:all` on the server so the module is compiled for Linux.
+
+### Option 3: Docker
 
 ```dockerfile
 # Build stage

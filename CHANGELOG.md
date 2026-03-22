@@ -7,10 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [1.1.0] - 2026-03-22
+
 ### Added
 - Plesk entry point (`app.js` in project root) for deployment on netcup EiWoMiSau shared hosting
 - Backend serves frontend build statically in production (catch-all route for SPA)
 - `.env.example` file for backend environment variables
+- Plesk shared hosting deployment guide in README
+
+### Fixed
+- Project "featured" toggle not saving — `FormData` sends `"false"` as a truthy string; now compared against `"true"` explicitly
+- Footer subline showing fallback text when the setting is empty
+- CORS blocking same-origin requests in production — requests without an `Origin` header are now allowed
+- `dotenv` import error on Plesk — removed from root `app.js`; backend resolves its own `.env` via `__dirname`
 
 ---
 
