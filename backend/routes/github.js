@@ -32,7 +32,7 @@ router.get('/repos', authenticateToken, async (req, res) => {
 
     const repos = await response.json();
     // Check which repos are already imported (including trash)
-    const imported = db.prepare('SELECT github_url, deleted_at FROM projects WHERE github_url IS NOT NULL AND github_url != ""').all();
+    const imported = db.prepare("SELECT github_url, deleted_at FROM projects WHERE github_url IS NOT NULL AND github_url != ''").all();
     const importedMap = {};
     for (const row of imported) {
       importedMap[row.github_url] = row.deleted_at ? 'trashed' : 'imported';
