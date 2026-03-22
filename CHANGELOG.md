@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.0] - 2026-03-22
+
+### Added
+- **Iconify integration** — migrated from hardcoded react-icons icon map to `@iconify/react`, giving access to 200K+ icons from any icon set (e.g. `simple-icons:react`, `mdi:home`)
+- **AutocompleteChipPicker** — shared component for tag/category selection with autocomplete, inline create via "+" button, and chips with remove
+- **Blog post tag picker** — replaced comma-separated text input with chip-based autocomplete; new tags created inline and persisted via API
+- **Dynamic skill categories** — replaced hardcoded select with autocomplete picker; categories stored as `skill_categories` setting and manageable inline
+- **Dynamic project categories** — same as skills, stored as `project_categories` setting
+- **Tech stack chip picker** — project tech stack now uses chip-based input with autocomplete from existing technologies
+- **Icon live preview** — skill icon field shows a real-time preview of the entered iconify icon name
+
+### Changed
+- Public Skills section now renders icons via `@iconify/react` (loaded on-demand from CDN) instead of a fixed react-icons map
+- Public About timeline icons also use iconify with fallback mapping for legacy `briefcase`/`award`/`book` values
+- Seed data updated: all skill icon names converted to iconify format (e.g. `SiReact` → `simple-icons:react`)
+- Seed data includes `skill_categories` and `project_categories` settings
+
+### Fixed
+- About page timeline "New Entry" select field sizing — added `appearance-none` for consistent cross-browser rendering
+
+---
+
 ## [1.3.0] - 2026-03-22
 
 ### Added

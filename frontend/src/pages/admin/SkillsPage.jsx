@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Icon } from '@iconify/react';
 import { usePagination } from '../../hooks/usePagination';
 import {
   DndContext,
@@ -18,6 +19,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import api from '../../api/axios';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import AutocompleteChipPicker from '../../components/ui/AutocompleteChipPicker';
 import { HiPlus, HiPencil, HiTrash, HiX } from 'react-icons/hi';
 import { HiMiniArrowsUpDown } from 'react-icons/hi2';
 import { useToast } from '../../components/ui/Toast';
@@ -85,6 +87,7 @@ export default function SkillsPage() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const { currentPage, setCurrentPage, totalPages: hookTotalPages, paginatedItems } = usePagination(skills, 10, { mode: 'url' });
   const perPage = 10;
@@ -102,7 +105,13 @@ export default function SkillsPage() {
     }).catch(() => setLoading(false));
   };
 
-  useEffect(() => { fetchSkills(); }, []);
+  useEffect(() => {
+    fetchSkills();
+    api.get('/settings').then((res) => {
+      const cats = (res.data.skill_categories || '').split(',').map((c) => c.trim()).filter(Boolean);
+      setCategories(cats);
+    });
+  }, []);
 
   const handleDragEnd = async (event) => {
     const { active, over } = event;
@@ -262,18 +271,21 @@ export default function SkillsPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-                <select
+                <AutocompleteChipPicker
                   value={form.category}
-                  onChange={(e) => setForm({ ...form, category: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                >
-                  <option value="">Select category</option>
-                  <option value="Frontend">Frontend</option>
-                  <option value="Backend">Backend</option>
-                  <option value="Tools">Tools</option>
-                  <option value="Design">Design</option>
-                  <option value="Other">Other</option>
-                </select>
+                  onChange={(v) => {
+                    // Only keep the last selected (single category)
+                    const parts = v.split(',').map((s) => s.trim()).filter(Boolean);
+                    setForm({ ...form, category: parts[parts.length - 1] || '' });
+                  }}
+                  suggestions={categories}
+                  onCreateNew={async (name) => {
+                    const updated = [...categories, name];
+                    setCategories(updated);
+                    await api.put('/settings', { skill_categories: updated.join(',') });
+                  }}
+                  placeholder="Select or create category..."
+                />
               </div>
 
               <div>
@@ -288,18 +300,24 @@ export default function SkillsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Icon name</label>
-                <input
-                  type="text" value={form.icon}
-                  onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                  placeholder="SiReact"
-                  className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                />
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Icon</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="text" value={form.icon}
+                    onChange={(e) => setForm({ ...form, icon: e.target.value })}
+                    placeholder="simple-icons:react"
+                    className="flex-1 px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  />
+                  {form.icon && (
+                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                      <Icon icon={form.icon} width={24} height={24} className="text-gray-600 dark:text-gray-400" />
+                    </div>
+                  )}
+                </div>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                  Browse icons at{' '}
-                  <a href="https://react-icons.github.io/react-icons/icons/si/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">react-icons/si</a>
-                  {' '}and{' '}
-                  <a href="https://react-icons.github.io/react-icons/icons/fa/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">react-icons/fa</a>
+                  Browse 200K+ icons at{' '}
+                  <a href="https://icon-sets.iconify.design/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">icon-sets.iconify.design</a>
+                  {' '}&mdash; use format like <code className="text-xs">simple-icons:react</code>
                 </p>
               </div>
 

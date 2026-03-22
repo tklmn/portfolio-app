@@ -52,7 +52,7 @@ Everything is manageable through a protected admin dashboard. No external CMS or
 
 - **Hero Section** — dynamic name, title, and introduction from admin settings
 - **About Me** — biography with experience timeline and stats
-- **Skills** — categorized skill grid with progress bars and icon mapping
+- **Skills** — categorized skill grid with progress bars and 200K+ icons via Iconify
 - **Projects** — searchable and filterable by technology, category, and keyword
 - **Blog** — markdown rendering with syntax highlighting, tags, reading time, and date
 - **Contact Form** — rate-limited submissions stored in the database
@@ -66,8 +66,8 @@ Everything is manageable through a protected admin dashboard. No external CMS or
 
 - **Dashboard** — overview with project, skill, message, and post counts
 - **Projects CRUD** — create, edit, delete with image upload, tech stack, and drag-and-drop reordering
-- **Skills CRUD** — manage skills with categories, levels, icons, and drag-and-drop reordering
-- **Blog Manager** — create and edit posts with markdown, tags, and publish/draft toggle
+- **Skills CRUD** — manage skills with dynamic categories, levels, Iconify icons with live preview, and drag-and-drop reordering
+- **Blog Manager** — create and edit posts with markdown, autocomplete tag picker, and publish/draft toggle
 - **Messages Inbox** — view contact submissions with read/unread status
 - **Trash Bin** — soft-delete for projects, skills, posts, and messages; restore or permanently delete from a unified trash page
 - **Profile** — update admin name, email, and password

@@ -19,6 +19,7 @@ import { CSS } from '@dnd-kit/utilities';
 import api from '../../api/axios';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import I18nField from '../../components/ui/I18nField';
+import AutocompleteChipPicker from '../../components/ui/AutocompleteChipPicker';
 import { HiPlus, HiPencil, HiTrash, HiX } from 'react-icons/hi';
 import { HiMiniArrowsUpDown } from 'react-icons/hi2';
 import { useToast } from '../../components/ui/Toast';
@@ -95,6 +96,7 @@ export default function ProjectsPage() {
   const [imageFile, setImageFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [projectCategories, setProjectCategories] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const { currentPage, setCurrentPage, totalPages: hookTotalPages, paginatedItems } = usePagination(projects, 10, { mode: 'url' });
   const perPage = 10;
@@ -117,6 +119,8 @@ export default function ProjectsPage() {
     api.get('/settings').then((res) => {
       const langs = (res.data.languages || 'en,de').split(',').map((l) => l.trim());
       setLanguages(langs);
+      const cats = (res.data.project_categories || '').split(',').map((c) => c.trim()).filter(Boolean);
+      setProjectCategories(cats);
     });
   }, []);
 
@@ -311,22 +315,30 @@ export default function ProjectsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tech Stack (comma-separated)</label>
-                <input
-                  type="text" value={form.tech_stack}
-                  onChange={(e) => setForm({ ...form, tech_stack: e.target.value })}
-                  placeholder="React, Node.js, PostgreSQL"
-                  className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tech Stack</label>
+                <AutocompleteChipPicker
+                  value={form.tech_stack}
+                  onChange={(v) => setForm({ ...form, tech_stack: v })}
+                  suggestions={[...new Set(projects.flatMap((p) => (p.tech_stack || '').split(',').map((t) => t.trim()).filter(Boolean)))]}
+                  placeholder="Add technologies..."
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-                <input
-                  type="text" value={form.category}
-                  onChange={(e) => setForm({ ...form, category: e.target.value })}
-                  placeholder="Web App, Dashboard, Developer Tool..."
-                  className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                <AutocompleteChipPicker
+                  value={form.category}
+                  onChange={(v) => {
+                    const parts = v.split(',').map((s) => s.trim()).filter(Boolean);
+                    setForm({ ...form, category: parts[parts.length - 1] || '' });
+                  }}
+                  suggestions={projectCategories}
+                  onCreateNew={async (name) => {
+                    const updated = [...projectCategories, name];
+                    setProjectCategories(updated);
+                    await api.put('/settings', { project_categories: updated.join(',') });
+                  }}
+                  placeholder="Select or create category..."
                 />
               </div>
 

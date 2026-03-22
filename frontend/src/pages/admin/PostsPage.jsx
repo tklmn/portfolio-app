@@ -6,6 +6,7 @@ import { HiPlus, HiPencil, HiTrash, HiX, HiEye, HiEyeOff } from 'react-icons/hi'
 import { useToast } from '../../components/ui/Toast';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
 import I18nField from '../../components/ui/I18nField';
+import AutocompleteChipPicker from '../../components/ui/AutocompleteChipPicker';
 import { displayName } from '../../utils/displayName';
 
 const emptyForm = { title: '', slug: '', content: '', excerpt: '', tags: '', published: false };
@@ -19,6 +20,7 @@ export default function PostsPage() {
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [languages, setLanguages] = useState(['en', 'de']);
+  const [allTags, setAllTags] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const { currentPage, setCurrentPage, totalPages: hookTotalPages, paginatedItems } = usePagination(posts, 10, { mode: 'url' });
   const perPage = 10;
@@ -31,8 +33,13 @@ export default function PostsPage() {
     }).catch(() => setLoading(false));
   };
 
+  const fetchTags = () => {
+    api.get('/tags').then((res) => setAllTags(res.data.map((t) => t.name)));
+  };
+
   useEffect(() => {
     fetchPosts();
+    fetchTags();
     api.get('/settings').then((res) => {
       const langs = (res.data.languages || 'en,de').split(',').map((l) => l.trim());
       setLanguages(langs);
@@ -233,13 +240,16 @@ export default function PostsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tags (comma-separated)</label>
-                <input
-                  type="text"
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tags</label>
+                <AutocompleteChipPicker
                   value={form.tags}
-                  onChange={(e) => setForm({ ...form, tags: e.target.value })}
-                  placeholder="React, JavaScript, Tutorial"
-                  className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  onChange={(v) => setForm({ ...form, tags: v })}
+                  suggestions={allTags}
+                  onCreateNew={async (name) => {
+                    await api.post('/tags', { name });
+                    fetchTags();
+                  }}
+                  placeholder="Add tags..."
                 />
               </div>
 

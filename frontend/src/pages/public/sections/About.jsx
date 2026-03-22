@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Icon } from '@iconify/react';
 import SectionHeading from '../../../components/ui/SectionHeading';
-import { FiBriefcase, FiBook, FiAward } from 'react-icons/fi';
 import { useLanguage } from '../../../context/LanguageContext';
 import { useSettings } from '../../../hooks/useSettings';
 import { useScrollReveal } from '../../../hooks/useScrollReveal';
@@ -8,9 +8,9 @@ import api from '../../../api/axios';
 import { useTranslateJson } from '../../../hooks/useTranslateJson';
 
 const iconMap = {
-  briefcase: FiBriefcase,
-  award: FiAward,
-  book: FiBook,
+  briefcase: 'feather:briefcase',
+  award: 'feather:award',
+  book: 'feather:book',
 };
 
 export default function About() {
@@ -71,11 +71,11 @@ export default function About() {
                 <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500 to-purple-600" />
                 <div className="space-y-8">
                   {timeline.map((item) => {
-                    const Icon = iconMap[item.icon] || FiBriefcase;
+                    const iconName = iconMap[item.icon] || item.icon || 'feather:briefcase';
                     return (
                       <div key={item.id} className="relative pl-16">
                         <div className="absolute left-3 w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                          <Icon size={14} className="text-white" />
+                          <Icon icon={iconName} width={14} height={14} className="text-white" />
                         </div>
                         <div className="bg-white dark:bg-gray-800/50 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700/50 hover:shadow-md transition-shadow">
                           <span className="text-xs font-medium text-blue-500 dark:text-blue-400">{item.year}</span>

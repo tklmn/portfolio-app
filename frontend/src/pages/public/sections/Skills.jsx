@@ -1,35 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Icon } from '@iconify/react';
 import SectionHeading from '../../../components/ui/SectionHeading';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 import { useLanguage } from '../../../context/LanguageContext';
 import { useScrollReveal } from '../../../hooks/useScrollReveal';
 import api from '../../../api/axios';
-import {
-  SiJavascript, SiTypescript, SiReact, SiHtml5, SiTailwindcss, SiBootstrap, SiSass,
-  SiNodedotjs, SiPhp, SiLaravel, SiMysql, SiSqlite,
-  SiDocker, SiApache, SiLinux,
-  SiGit, SiGithub, SiGitlab, SiBitbucket,
-  SiJira, SiSlack, SiDiscord, SiTrello,
-  SiNpm, SiVite,
-  SiTypo3, SiWordpress,
-} from 'react-icons/si';
-import { FaWindows, FaApple } from 'react-icons/fa';
-
-const iconMap = {
-  // Frontend
-  SiJavascript, SiTypescript, SiReact, SiHtml5, SiTailwindcss, SiBootstrap, SiSass,
-  // Backend
-  SiNodedotjs, SiPhp, SiLaravel, SiMysql, SiSqlite,
-  // DevOps
-  SiDocker, SiApache, SiLinux,
-  // Tools
-  SiGit, SiGithub, SiGitlab, SiBitbucket,
-  SiJira, SiSlack, SiDiscord, SiTrello,
-  SiNpm, SiVite,
-  FaWindows, FaApple,
-  // CMS
-  SiTypo3, SiWordpress,
-};
 
 export default function Skills() {
   const [skills, setSkills] = useState([]);
@@ -75,7 +50,6 @@ export default function Skills() {
 
         <div ref={ref} className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           {filtered.map((skill, index) => {
-            const IconComponent = iconMap[skill.icon];
             return (
               <div
                 key={skill.id}
@@ -83,12 +57,8 @@ export default function Skills() {
                 style={{ transitionDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  {IconComponent ? (
-                    <IconComponent className="text-2xl text-gray-600 dark:text-gray-400 group-hover:text-blue-500 transition-colors" />
-                  ) : skill.icon ? (
-                    <span className="w-6 h-6 flex items-center justify-center text-xs font-bold text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 rounded" title={`Icon "${skill.icon}" not found`}>
-                      {skill.name.charAt(0)}
-                    </span>
+                  {skill.icon ? (
+                    <Icon icon={skill.icon} width={24} height={24} className="text-gray-600 dark:text-gray-400 group-hover:text-blue-500 transition-colors" />
                   ) : null}
                   <div>
                     <h3 className="font-medium text-gray-900 dark:text-white text-sm">{skill.name}</h3>

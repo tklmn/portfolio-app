@@ -49,38 +49,38 @@ const insertSkill = db.prepare(
 
 const skills = [
   // Frontend
-  ['JavaScript', 'Frontend', 90, 'SiJavascript', 1],
-  ['TypeScript', 'Frontend', 85, 'SiTypescript', 2],
-  ['React', 'Frontend', 90, 'SiReact', 3],
-  ['HTML5', 'Frontend', 95, 'SiHtml5', 4],
-  ['Tailwind CSS', 'Frontend', 85, 'SiTailwindcss', 5],
-  ['Bootstrap', 'Frontend', 70, 'SiBootstrap', 6],
-  ['Sass', 'Frontend', 75, 'SiSass', 7],
+  ['JavaScript', 'Frontend', 90, 'simple-icons:javascript', 1],
+  ['TypeScript', 'Frontend', 85, 'simple-icons:typescript', 2],
+  ['React', 'Frontend', 90, 'simple-icons:react', 3],
+  ['HTML5', 'Frontend', 95, 'simple-icons:html5', 4],
+  ['Tailwind CSS', 'Frontend', 85, 'simple-icons:tailwindcss', 5],
+  ['Bootstrap', 'Frontend', 70, 'simple-icons:bootstrap', 6],
+  ['Sass', 'Frontend', 75, 'simple-icons:sass', 7],
   // Backend
-  ['Node.js', 'Backend', 85, 'SiNodedotjs', 8],
-  ['PHP', 'Backend', 80, 'SiPhp', 9],
-  ['Laravel', 'Backend', 75, 'SiLaravel', 10],
-  ['MySQL', 'Backend', 70, 'SiMysql', 11],
-  ['SQLite', 'Backend', 65, 'SiSqlite', 12],
+  ['Node.js', 'Backend', 85, 'simple-icons:nodedotjs', 8],
+  ['PHP', 'Backend', 80, 'simple-icons:php', 9],
+  ['Laravel', 'Backend', 75, 'simple-icons:laravel', 10],
+  ['MySQL', 'Backend', 70, 'simple-icons:mysql', 11],
+  ['SQLite', 'Backend', 65, 'simple-icons:sqlite', 12],
   // DevOps
-  ['Docker', 'DevOps', 70, 'SiDocker', 13],
-  ['Apache', 'DevOps', 65, 'SiApache', 14],
-  ['Linux', 'DevOps', 75, 'SiLinux', 15],
+  ['Docker', 'DevOps', 70, 'simple-icons:docker', 13],
+  ['Apache', 'DevOps', 65, 'simple-icons:apache', 14],
+  ['Linux', 'DevOps', 75, 'simple-icons:linux', 15],
   // Tools
-  ['Git', 'Tools', 85, 'SiGit', 16],
-  ['GitHub', 'Tools', 85, 'SiGithub', 17],
-  ['GitLab', 'Tools', 70, 'SiGitlab', 18],
-  ['Bitbucket', 'Tools', 65, 'SiBitbucket', 19],
-  ['Jira', 'Tools', 70, 'SiJira', 20],
-  ['Slack', 'Tools', 75, 'SiSlack', 21],
-  ['Trello', 'Tools', 65, 'SiTrello', 22],
-  ['NPM', 'Tools', 80, 'SiNpm', 24],
-  ['Vite', 'Tools', 80, 'SiVite', 25],
-  ['Windows', 'Tools', 70, 'FaWindows', 26],
-  ['Apple', 'Tools', 65, 'FaApple', 27],
+  ['Git', 'Tools', 85, 'simple-icons:git', 16],
+  ['GitHub', 'Tools', 85, 'simple-icons:github', 17],
+  ['GitLab', 'Tools', 70, 'simple-icons:gitlab', 18],
+  ['Bitbucket', 'Tools', 65, 'simple-icons:bitbucket', 19],
+  ['Jira', 'Tools', 70, 'simple-icons:jira', 20],
+  ['Slack', 'Tools', 75, 'simple-icons:slack', 21],
+  ['Trello', 'Tools', 65, 'simple-icons:trello', 22],
+  ['NPM', 'Tools', 80, 'simple-icons:npm', 24],
+  ['Vite', 'Tools', 80, 'simple-icons:vite', 25],
+  ['Windows', 'Tools', 70, 'fa6-brands:windows', 26],
+  ['Apple', 'Tools', 65, 'fa6-brands:apple', 27],
   // CMS
-  ['TYPO3', 'CMS', 80, 'SiTypo3', 28],
-  ['WordPress', 'CMS', 75, 'SiWordpress', 29],
+  ['TYPO3', 'CMS', 80, 'simple-icons:typo3', 28],
+  ['WordPress', 'CMS', 75, 'simple-icons:wordpress', 29],
 ];
 
 for (const s of skills) {
@@ -195,6 +195,9 @@ const settings = {
   'robots_allow_indexing': 'true',
   'robots_disallow_paths': '/admin',
   'sitemap_enabled': 'true',
+  // Dynamic categories
+  'skill_categories': 'Frontend,Backend,DevOps,Tools,CMS',
+  'project_categories': 'Web App,Dashboard,Developer Tool',
 };
 
 for (const [key, value] of Object.entries(settings)) {
