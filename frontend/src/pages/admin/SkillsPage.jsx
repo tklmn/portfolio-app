@@ -20,6 +20,7 @@ import { CSS } from '@dnd-kit/utilities';
 import api from '../../api/axios';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import AutocompleteChipPicker from '../../components/ui/AutocompleteChipPicker';
+import ManageListModal from '../../components/ui/ManageListModal';
 import { HiPlus, HiPencil, HiTrash, HiX } from 'react-icons/hi';
 import { HiMiniArrowsUpDown } from 'react-icons/hi2';
 import { useToast } from '../../components/ui/Toast';
@@ -88,6 +89,7 @@ export default function SkillsPage() {
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [showManageCategories, setShowManageCategories] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const { currentPage, setCurrentPage, totalPages: hookTotalPages, paginatedItems } = usePagination(skills, 10, { mode: 'url' });
   const perPage = 10;
@@ -105,12 +107,16 @@ export default function SkillsPage() {
     }).catch(() => setLoading(false));
   };
 
-  useEffect(() => {
-    fetchSkills();
+  const fetchCategories = () => {
     api.get('/settings').then((res) => {
       const cats = (res.data.skill_categories || '').split(',').map((c) => c.trim()).filter(Boolean);
       setCategories(cats);
     });
+  };
+
+  useEffect(() => {
+    fetchSkills();
+    fetchCategories();
   }, []);
 
   const handleDragEnd = async (event) => {
@@ -195,12 +201,20 @@ export default function SkillsPage() {
             </button>
           )}
         </div>
-        <button
-          onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-sm font-medium hover:shadow-lg transition-all"
-        >
-          <HiPlus size={18} /> Add Skill
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowManageCategories(true)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-all"
+          >
+            Manage Categories
+          </button>
+          <button
+            onClick={openCreate}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-sm font-medium hover:shadow-lg transition-all"
+          >
+            <HiPlus size={18} /> Add Skill
+          </button>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
@@ -347,6 +361,23 @@ export default function SkillsPage() {
         confirmLabel="Move to Trash"
         onConfirm={() => handleDelete(confirmDelete)}
         onCancel={() => setConfirmDelete(null)}
+      />
+
+      <ManageListModal
+        open={showManageCategories}
+        onClose={() => setShowManageCategories(false)}
+        title="Manage Skill Categories"
+        items={categories.map((c) => ({ name: c, count: skills.filter((s) => s.category === c).length }))}
+        onAdd={async (name) => {
+          const updated = [...categories, name];
+          setCategories(updated);
+          await api.put('/settings', { skill_categories: updated.join(',') });
+        }}
+        onDelete={async (item) => {
+          const updated = categories.filter((c) => c !== item.name);
+          setCategories(updated);
+          await api.put('/settings', { skill_categories: updated.join(',') });
+        }}
       />
     </div>
   );

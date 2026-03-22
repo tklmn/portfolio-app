@@ -20,6 +20,7 @@ import api from '../../api/axios';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import I18nField from '../../components/ui/I18nField';
 import AutocompleteChipPicker from '../../components/ui/AutocompleteChipPicker';
+import ManageListModal from '../../components/ui/ManageListModal';
 import { HiPlus, HiPencil, HiTrash, HiX } from 'react-icons/hi';
 import { HiMiniArrowsUpDown } from 'react-icons/hi2';
 import { useToast } from '../../components/ui/Toast';
@@ -97,6 +98,7 @@ export default function ProjectsPage() {
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [projectCategories, setProjectCategories] = useState([]);
+  const [showManageCategories, setShowManageCategories] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const { currentPage, setCurrentPage, totalPages: hookTotalPages, paginatedItems } = usePagination(projects, 10, { mode: 'url' });
   const perPage = 10;
@@ -114,14 +116,18 @@ export default function ProjectsPage() {
     }).catch(() => setLoading(false));
   };
 
-  useEffect(() => {
-    fetchProjects();
+  const fetchSettings = () => {
     api.get('/settings').then((res) => {
       const langs = (res.data.languages || 'en,de').split(',').map((l) => l.trim());
       setLanguages(langs);
       const cats = (res.data.project_categories || '').split(',').map((c) => c.trim()).filter(Boolean);
       setProjectCategories(cats);
     });
+  };
+
+  useEffect(() => {
+    fetchProjects();
+    fetchSettings();
   }, []);
 
   const handleDragEnd = async (event) => {
@@ -218,12 +224,20 @@ export default function ProjectsPage() {
             </button>
           )}
         </div>
-        <button
-          onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-sm font-medium hover:shadow-lg transition-all"
-        >
-          <HiPlus size={18} /> Add Project
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowManageCategories(true)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-all"
+          >
+            Manage Categories
+          </button>
+          <button
+            onClick={openCreate}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-sm font-medium hover:shadow-lg transition-all"
+          >
+            <HiPlus size={18} /> Add Project
+          </button>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
@@ -407,6 +421,23 @@ export default function ProjectsPage() {
         confirmLabel="Move to Trash"
         onConfirm={() => handleDelete(confirmDelete)}
         onCancel={() => setConfirmDelete(null)}
+      />
+
+      <ManageListModal
+        open={showManageCategories}
+        onClose={() => setShowManageCategories(false)}
+        title="Manage Project Categories"
+        items={projectCategories.map((c) => ({ name: c, count: projects.filter((p) => p.category === c).length }))}
+        onAdd={async (name) => {
+          const updated = [...projectCategories, name];
+          setProjectCategories(updated);
+          await api.put('/settings', { project_categories: updated.join(',') });
+        }}
+        onDelete={async (item) => {
+          const updated = projectCategories.filter((c) => c !== item.name);
+          setProjectCategories(updated);
+          await api.put('/settings', { project_categories: updated.join(',') });
+        }}
       />
     </div>
   );

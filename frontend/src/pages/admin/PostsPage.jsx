@@ -7,6 +7,7 @@ import { useToast } from '../../components/ui/Toast';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
 import I18nField from '../../components/ui/I18nField';
 import AutocompleteChipPicker from '../../components/ui/AutocompleteChipPicker';
+import ManageListModal from '../../components/ui/ManageListModal';
 import { displayName } from '../../utils/displayName';
 
 const emptyForm = { title: '', slug: '', content: '', excerpt: '', tags: '', published: false };
@@ -21,6 +22,8 @@ export default function PostsPage() {
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [languages, setLanguages] = useState(['en', 'de']);
   const [allTags, setAllTags] = useState([]);
+  const [allTagsFull, setAllTagsFull] = useState([]);
+  const [showManageTags, setShowManageTags] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const { currentPage, setCurrentPage, totalPages: hookTotalPages, paginatedItems } = usePagination(posts, 10, { mode: 'url' });
   const perPage = 10;
@@ -34,7 +37,10 @@ export default function PostsPage() {
   };
 
   const fetchTags = () => {
-    api.get('/tags').then((res) => setAllTags(res.data.map((t) => t.name)));
+    api.get('/tags').then((res) => {
+      setAllTagsFull(res.data);
+      setAllTags(res.data.map((t) => t.name));
+    });
   };
 
   useEffect(() => {
@@ -111,12 +117,20 @@ export default function PostsPage() {
             </button>
           )}
         </div>
-        <button
-          onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-sm font-medium hover:shadow-lg transition-all"
-        >
-          <HiPlus size={18} /> New Post
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowManageTags(true)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-all"
+          >
+            Manage Tags
+          </button>
+          <button
+            onClick={openCreate}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-sm font-medium hover:shadow-lg transition-all"
+          >
+            <HiPlus size={18} /> New Post
+          </button>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
@@ -290,6 +304,21 @@ export default function PostsPage() {
         confirmLabel="Move to Trash"
         onConfirm={() => handleDelete(confirmDelete)}
         onCancel={() => setConfirmDelete(null)}
+      />
+
+      <ManageListModal
+        open={showManageTags}
+        onClose={() => setShowManageTags(false)}
+        title="Manage Tags"
+        items={allTagsFull.map((t) => ({ id: t.id, name: t.name, count: t.post_count }))}
+        onAdd={async (name) => {
+          await api.post('/tags', { name });
+          fetchTags();
+        }}
+        onDelete={async (item) => {
+          await api.delete(`/tags/${item.id}`);
+          fetchTags();
+        }}
       />
     </div>
   );
