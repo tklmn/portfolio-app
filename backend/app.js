@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { initDb } from './db/init.js';
 import authRoutes from './routes/auth.js';
@@ -76,9 +77,14 @@ app.get('/api/health', (_req, res) => {
 
 // Serve frontend build in production
 const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+const indexHtml = path.join(frontendDist, 'index.html');
 app.use(express.static(frontendDist));
 app.get('*', (_req, res) => {
-  res.sendFile(path.join(frontendDist, 'index.html'));
+  if (fs.existsSync(indexHtml)) {
+    res.sendFile(indexHtml);
+  } else {
+    res.status(503).send('App is building — please try again in a moment.');
+  }
 });
 
 // Express recognises error handlers by their arity (4 params) — next must stay even if unused.
