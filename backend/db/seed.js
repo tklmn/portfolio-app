@@ -191,9 +191,10 @@ const settings = {
   // Blog display
   'blog_show_date': 'true',
   'blog_show_reading_time': 'true',
-  // Robots
+  // Robots & Sitemap
   'robots_allow_indexing': 'true',
   'robots_disallow_paths': '/admin',
+  'sitemap_enabled': 'true',
 };
 
 for (const [key, value] of Object.entries(settings)) {

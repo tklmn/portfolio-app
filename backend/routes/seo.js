@@ -18,7 +18,9 @@ router.get('/sitemap.xml', (req, res) => {
   const db = getDb();
   const settings = loadSettings(db);
   const baseUrl = settings.site_url;
-  if (!baseUrl) {
+  const sitemapEnabled = settings.sitemap_enabled !== 'false';
+
+  if (!baseUrl || !sitemapEnabled) {
     res.set('Content-Type', 'application/xml');
     return res.send('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>');
   }
@@ -65,7 +67,8 @@ router.get('/robots.txt', (req, res) => {
     for (const p of disallowed) {
       lines.push(`Disallow: ${p}`);
     }
-    if (baseUrl) {
+    const sitemapEnabled = settings.sitemap_enabled !== 'false';
+    if (baseUrl && sitemapEnabled) {
       lines.push('', `Sitemap: ${baseUrl}/sitemap.xml`);
     }
   }

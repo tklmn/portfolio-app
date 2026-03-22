@@ -295,6 +295,12 @@ export default function SkillsPage() {
                   placeholder="SiReact"
                   className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 />
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                  Browse icons at{' '}
+                  <a href="https://react-icons.github.io/react-icons/icons/si/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">react-icons/si</a>
+                  {' '}and{' '}
+                  <a href="https://react-icons.github.io/react-icons/icons/fa/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">react-icons/fa</a>
+                </p>
               </div>
 
               <div className="flex gap-3 pt-2">

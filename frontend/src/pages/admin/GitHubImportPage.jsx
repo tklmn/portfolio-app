@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { useToast } from '../../components/ui/Toast';
-import { FiStar, FiGitBranch, FiDownload, FiRefreshCw, FiCheck } from 'react-icons/fi';
+import { FiStar, FiGitBranch, FiDownload, FiRefreshCw, FiCheck, FiTrash2 } from 'react-icons/fi';
 
 export default function GitHubImportPage() {
   const [repos, setRepos] = useState([]);
@@ -25,6 +25,19 @@ export default function GitHubImportPage() {
   };
 
   useEffect(() => { fetchRepos(); }, []);
+
+  const handleRemove = async (repo) => {
+    setImporting(repo.id);
+    try {
+      await api.delete(`/github/import`, { data: { github_url: repo.html_url } });
+      setRepos((prev) => prev.map((r) => r.id === repo.id ? { ...r, import_status: null } : r));
+      addToast(`"${repo.name}" removed from projects`, 'success');
+    } catch (err) {
+      addToast(err.response?.data?.error || 'Remove failed', 'error');
+    } finally {
+      setImporting(null);
+    }
+  };
 
   const handleImport = async (repo) => {
     setImporting(repo.id);
@@ -87,8 +100,17 @@ export default function GitHubImportPage() {
                     {repo.description || 'No description'}
                   </p>
                 </div>
-                {repo.import_status ? (
-                  <span className="flex-shrink-0 p-2 text-green-500" title="Already imported">
+                {repo.import_status === 'imported' ? (
+                  <button
+                    onClick={() => handleRemove(repo)}
+                    disabled={importing === repo.id}
+                    className="flex-shrink-0 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors disabled:opacity-50"
+                    title="Remove from projects"
+                  >
+                    <FiTrash2 size={18} />
+                  </button>
+                ) : repo.import_status === 'trashed' ? (
+                  <span className="flex-shrink-0 p-2 text-gray-400" title="In trash">
                     <FiCheck size={18} />
                   </span>
                 ) : (

@@ -98,4 +98,17 @@ router.post('/import', authenticateToken, async (req, res) => {
   res.status(201).json(project);
 });
 
+// DELETE remove an imported GitHub project (admin)
+router.delete('/import', authenticateToken, (req, res) => {
+  const { github_url } = req.body;
+  if (!github_url) return res.status(400).json({ error: 'github_url is required' });
+
+  const db = getDb();
+  const project = db.prepare('SELECT id FROM projects WHERE github_url = ? AND deleted_at IS NULL').get(github_url);
+  if (!project) return res.status(404).json({ error: 'Project not found' });
+
+  db.prepare('UPDATE projects SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?').run(project.id);
+  res.json({ message: 'Project removed' });
+});
+
 export default router;

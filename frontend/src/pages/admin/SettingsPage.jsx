@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import api from '../../api/axios';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { useToast } from '../../components/ui/Toast';
 import SettingsI18nField from '../../components/ui/SettingsI18nField';
+import { HiUpload, HiX } from 'react-icons/hi';
 
 // Fields with i18n: true get tabbed language inputs
 const sections = [
@@ -30,7 +31,7 @@ const sections = [
       { key: 'hero_name', label: 'Name', type: 'text' },
       { key: 'hero_title', label: 'Job Title', type: 'text', i18n: true },
       { key: 'hero_subtitle', label: 'Introduction Text', type: 'textarea', i18n: true },
-      { key: 'hero_image', label: 'Profile Image URL (or /uploads/... path)', type: 'text' },
+      { key: 'hero_image', label: 'Profile Image', type: 'image_upload' },
       { key: 'hero_badge_enabled', label: 'Experience Badge Visible', type: 'toggle' },
       { key: 'hero_badge_text', label: 'Badge Text', type: 'text', i18n: true },
     ],
@@ -68,9 +69,10 @@ const sections = [
   },
   {
     title: 'Robots / Crawling',
-    description: 'Control how search engines crawl your site. Changes take effect immediately in /robots.txt.',
+    description: 'Control how search engines crawl your site. Changes take effect immediately in /robots.txt and /sitemap.xml.',
     fields: [
       { key: 'robots_allow_indexing', label: 'Allow Search Engine Indexing', type: 'toggle' },
+      { key: 'sitemap_enabled', label: 'Generate Sitemap', type: 'toggle' },
       { key: 'robots_disallow_paths', label: 'Disallowed Paths (one per line, e.g. /admin)', type: 'textarea' },
     ],
   },
@@ -106,6 +108,64 @@ const sections = [
     ],
   },
 ];
+
+function HeroImageField({ settings, setSettings, addToast }) {
+  const fileRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const currentImage = settings.hero_image;
+
+  const handleUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      const { data } = await api.post('/settings/hero-image', fd);
+      setSettings({ ...settings, hero_image: data.hero_image });
+      addToast('Profile image uploaded', 'success');
+    } catch (err) {
+      addToast(err.response?.data?.error || 'Upload failed', 'error');
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = '';
+    }
+  };
+
+  const handleRemove = async () => {
+    try {
+      await api.delete('/settings/hero-image');
+      setSettings({ ...settings, hero_image: '' });
+      addToast('Profile image removed', 'success');
+    } catch {
+      addToast('Failed to remove image', 'error');
+    }
+  };
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Image</label>
+      {currentImage ? (
+        <div className="flex items-center gap-4">
+          <img src={currentImage} alt="Profile" className="w-20 h-20 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700" />
+          <div className="flex gap-2">
+            <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading} className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50">
+              <HiUpload size={14} /> Replace
+            </button>
+            <button type="button" onClick={handleRemove} className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+              <HiX size={14} /> Remove
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading} className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 rounded-lg text-sm hover:border-blue-500 hover:text-blue-500 transition-colors disabled:opacity-50 w-full justify-center">
+          <HiUpload size={18} /> {uploading ? 'Uploading...' : 'Upload Image'}
+        </button>
+      )}
+      <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/gif,image/webp" onChange={handleUpload} className="hidden" />
+    </div>
+  );
+}
 
 function ToggleField({ field, settings, setSettings }) {
   const isOn = settings[field.key] !== undefined ? settings[field.key] === 'true' : field.defaultOn !== false;
@@ -190,7 +250,9 @@ export default function SettingsPage() {
             <div className="space-y-4">
               {section.fields.map((field) => (
                 <div key={field.key}>
-                  {field.type === 'toggle' ? (
+                  {field.type === 'image_upload' ? (
+                    <HeroImageField settings={settings} setSettings={setSettings} addToast={addToast} />
+                  ) : field.type === 'toggle' ? (
                     <ToggleField field={field} settings={settings} setSettings={setSettings} />
                   ) : field.i18n ? (
                     <div>
