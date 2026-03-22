@@ -160,6 +160,16 @@ const settings = {
   'about_heading_de': 'Wer bin ich?',
   'about_bio_en': 'I am a passionate full-stack developer with over 5 years of experience building web applications. I love creating elegant solutions to complex problems and bringing ideas to life through code.',
   'about_bio_de': 'Ich bin ein leidenschaftlicher Full-Stack-Entwickler mit über 5 Jahren Erfahrung in der Entwicklung von Webanwendungen. Ich liebe es, elegante Lösungen für komplexe Probleme zu finden.',
+  // About stats
+  'about_stat_1_value': '5+',
+  'about_stat_1_label_en': 'Years Experience',
+  'about_stat_1_label_de': 'Jahre Erfahrung',
+  'about_stat_2_value': '50+',
+  'about_stat_2_label_en': 'Projects Completed',
+  'about_stat_2_label_de': 'Projekte abgeschlossen',
+  'about_stat_3_value': '20+',
+  'about_stat_3_label_en': 'Happy Clients',
+  'about_stat_3_label_de': 'Zufriedene Kunden',
   // Footer
   'footer_copyright_en': '\u00A9 2026 Portfolio. All rights reserved.',
   'footer_copyright_de': '\u00A9 2026 Portfolio. Alle Rechte vorbehalten.',
@@ -178,6 +188,9 @@ const settings = {
   'github_username': '',
   'contact_email': 'hello@portfolio.com',
   'contact_location': 'San Francisco, CA',
+  // Robots
+  'robots_allow_indexing': 'true',
+  'robots_disallow_paths': '/admin',
 };
 
 for (const [key, value] of Object.entries(settings)) {

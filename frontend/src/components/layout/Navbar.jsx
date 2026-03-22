@@ -67,7 +67,7 @@ export default function Navbar() {
             to="/"
             className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent"
           >
-            {settings?.site_logo_text || '<Portfolio />'}
+            {settings?.site_logo_text || ''}
           </Link>
 
           {/* Desktop Navigation */}

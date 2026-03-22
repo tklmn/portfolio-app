@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { useToast } from '../../components/ui/Toast';
-import { FiStar, FiGitBranch, FiDownload, FiRefreshCw, FiCheck, FiTrash2 } from 'react-icons/fi';
+import { FiStar, FiGitBranch, FiDownload, FiRefreshCw, FiCheck } from 'react-icons/fi';
 
 export default function GitHubImportPage() {
   const [repos, setRepos] = useState([]);
@@ -77,18 +77,19 @@ export default function GitHubImportPage() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{repo.name}</h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 dark:text-white truncate">{repo.name}</h3>
+                    {repo.import_status === 'imported' && (
+                      <span className="px-2 py-0.5 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Imported</span>
+                    )}
+                  </div>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
                     {repo.description || 'No description'}
                   </p>
                 </div>
-                {repo.import_status === 'imported' ? (
+                {repo.import_status ? (
                   <span className="flex-shrink-0 p-2 text-green-500" title="Already imported">
                     <FiCheck size={18} />
-                  </span>
-                ) : repo.import_status === 'trashed' ? (
-                  <span className="flex-shrink-0 p-2 text-yellow-500" title="In trash — restore from Trash page">
-                    <FiTrash2 size={18} />
                   </span>
                 ) : (
                   <button

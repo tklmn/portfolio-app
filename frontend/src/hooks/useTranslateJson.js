@@ -17,7 +17,9 @@ export function useTranslateJson() {
     if (value.startsWith('{')) {
       try {
         const parsed = JSON.parse(value);
-        return parsed[language] || parsed.en || parsed[Object.keys(parsed)[0]] || value;
+        if (typeof parsed === 'object' && parsed !== null) {
+          return parsed[language] ?? parsed.en ?? parsed[Object.keys(parsed)[0]] ?? '';
+        }
       } catch {
         return value;
       }

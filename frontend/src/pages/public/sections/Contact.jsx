@@ -7,7 +7,7 @@ import api from '../../../api/axios';
 import { FiMail, FiMapPin, FiSend } from 'react-icons/fi';
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', message: '', website: '' });
   const [status, setStatus] = useState({ type: '', message: '' });
   const [sending, setSending] = useState(false);
   const { t } = useLanguage();
@@ -22,7 +22,7 @@ export default function Contact() {
     try {
       await api.post('/messages', form);
       setStatus({ type: 'success', message: t('contact.success') });
-      setForm({ name: '', email: '', message: '' });
+      setForm({ name: '', email: '', message: '', website: '' });
     } catch (err) {
       setStatus({ type: 'error', message: err.response?.data?.error || t('contact.error') });
     } finally {
@@ -41,16 +41,18 @@ export default function Contact() {
               <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-500"><FiMail size={24} /></div>
               <div>
                 <h3 className="font-medium text-gray-900 dark:text-white">Email</h3>
-                <a href={`mailto:${settings?.contact_email || 'hello@portfolio.com'}`} className="text-gray-600 dark:text-gray-400 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
-                  {settings?.contact_email || 'hello@portfolio.com'}
-                </a>
+                {settings?.contact_email && (
+                  <a href={`mailto:${settings.contact_email}`} className="text-gray-600 dark:text-gray-400 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+                    {settings.contact_email}
+                  </a>
+                )}
               </div>
             </div>
             <div className="flex items-start gap-4">
               <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-500"><FiMapPin size={24} /></div>
               <div>
                 <h3 className="font-medium text-gray-900 dark:text-white">{t('contact.location')}</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">{settings?.contact_location || 'San Francisco, CA'}</p>
+                {settings?.contact_location && <p className="text-gray-600 dark:text-gray-400 text-sm">{settings.contact_location}</p>}
               </div>
             </div>
           </div>
@@ -61,6 +63,12 @@ export default function Contact() {
                 {status.message}
               </div>
             )}
+
+            {/* Honeypot — hidden from humans, bots fill it in */}
+            <div className="absolute opacity-0 -z-10" aria-hidden="true">
+              <label htmlFor="contact-website">Website</label>
+              <input id="contact-website" type="text" name="website" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} tabIndex={-1} autoComplete="off" />
+            </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>

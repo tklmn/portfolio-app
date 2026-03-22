@@ -45,11 +45,29 @@ router.get('/robots.txt', (req, res) => {
   const db = getDb();
   const settings = loadSettings(db);
   const baseUrl = settings.site_url || 'https://localhost:5173';
+  const allowIndexing = settings.robots_allow_indexing !== 'false';
 
-  const txt = `User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: ${baseUrl}/sitemap.xml\n`;
+  const lines = ['User-agent: *'];
+
+  if (!allowIndexing) {
+    lines.push('Disallow: /');
+  } else {
+    lines.push('Allow: /');
+    // Parse custom disallowed paths (one per line), always include /admin
+    const customPaths = (settings.robots_disallow_paths || '/admin')
+      .split('\n')
+      .map((p) => p.trim())
+      .filter(Boolean);
+    const disallowed = new Set(customPaths);
+    disallowed.add('/admin');
+    for (const p of disallowed) {
+      lines.push(`Disallow: ${p}`);
+    }
+    lines.push('', `Sitemap: ${baseUrl}/sitemap.xml`);
+  }
 
   res.set('Content-Type', 'text/plain');
-  res.send(txt);
+  res.send(lines.join('\n') + '\n');
 });
 
 export default router;

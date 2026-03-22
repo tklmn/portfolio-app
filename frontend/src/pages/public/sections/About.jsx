@@ -36,32 +36,32 @@ export default function About() {
         <div ref={ref} className={`grid lg:grid-cols-2 gap-12 items-start transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="space-y-6">
             <div className="bg-white dark:bg-gray-800/50 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-700/50">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{ts('about_heading') || t('about.who')}</h3>
+              {ts('about_heading') && <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{ts('about_heading')}</h3>}
               <div className="space-y-4 text-gray-600 dark:text-gray-400 leading-relaxed">
-                <p>{ts('about_bio') || 'I am a passionate full-stack developer with over 5 years of experience building web applications.'}</p>
+                {ts('about_bio') && <p>{ts('about_bio')}</p>}
                 {ts('about_bio_2') && <p>{ts('about_bio_2')}</p>}
                 {ts('about_bio_3') && <p>{ts('about_bio_3')}</p>}
-                {!ts('about_bio_2') && !ts('about_bio_3') && (
-                  <>
-                    <p>My expertise spans the entire development stack — from crafting pixel-perfect UIs with React and Tailwind CSS to designing robust APIs with Node.js and managing databases.</p>
-                    <p>When I'm not coding, you'll find me contributing to open-source projects, writing technical blog posts, or exploring new technologies.</p>
-                  </>
-                )}
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              {[
-                { value: ts('about_stat_1_value') || '5+', label: ts('about_stat_1_label') || t('about.years_exp') },
-                { value: ts('about_stat_2_value') || '50+', label: ts('about_stat_2_label') || t('about.projects_done') },
-                { value: ts('about_stat_3_value') || '20+', label: ts('about_stat_3_label') || t('about.happy_clients') },
-              ].map((stat) => (
-                <div key={stat.label} className="bg-white dark:bg-gray-800/50 rounded-xl p-4 text-center shadow-sm border border-gray-200 dark:border-gray-700/50">
-                  <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">{stat.value}</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+            {[
+              { value: ts('about_stat_1_value'), label: ts('about_stat_1_label') },
+              { value: ts('about_stat_2_value'), label: ts('about_stat_2_label') },
+              { value: ts('about_stat_3_value'), label: ts('about_stat_3_label') },
+            ].some((s) => s.value) && (
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { value: ts('about_stat_1_value'), label: ts('about_stat_1_label') },
+                  { value: ts('about_stat_2_value'), label: ts('about_stat_2_label') },
+                  { value: ts('about_stat_3_value'), label: ts('about_stat_3_label') },
+                ].filter((s) => s.value).map((stat) => (
+                  <div key={stat.value} className="bg-white dark:bg-gray-800/50 rounded-xl p-4 text-center shadow-sm border border-gray-200 dark:border-gray-700/50">
+                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">{stat.value}</div>
+                    {stat.label && <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{stat.label}</div>}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {timeline.length > 0 && (
@@ -80,8 +80,8 @@ export default function About() {
                         <div className="bg-white dark:bg-gray-800/50 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700/50 hover:shadow-md transition-shadow">
                           <span className="text-xs font-medium text-blue-500 dark:text-blue-400">{item.year}</span>
                           <h4 className="text-base font-semibold text-gray-900 dark:text-white mt-1">{tj(item.title)}</h4>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">{tj(item.company)}</p>
-                          {item.description && <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{tj(item.description)}</p>}
+                          {tj(item.company) && <p className="text-sm text-gray-500 dark:text-gray-400">{tj(item.company)}</p>}
+                          {tj(item.description) && <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{tj(item.description)}</p>}
                         </div>
                       </div>
                     );

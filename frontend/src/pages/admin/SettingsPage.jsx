@@ -67,6 +67,14 @@ const sections = [
     ],
   },
   {
+    title: 'Robots / Crawling',
+    description: 'Control how search engines crawl your site. Changes take effect immediately in /robots.txt.',
+    fields: [
+      { key: 'robots_allow_indexing', label: 'Allow Search Engine Indexing', type: 'toggle' },
+      { key: 'robots_disallow_paths', label: 'Disallowed Paths (one per line, e.g. /admin)', type: 'textarea' },
+    ],
+  },
+  {
     title: 'UI Settings',
     fields: [
       { key: 'scroll_to_top_enabled', label: 'Scroll-to-Top Button', type: 'toggle' },

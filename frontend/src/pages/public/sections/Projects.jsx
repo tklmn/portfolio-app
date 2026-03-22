@@ -31,7 +31,7 @@ export default function Projects() {
   // Extract unique techs and categories for filter dropdowns
   const allTechs = useMemo(() => {
     const techs = new Set();
-    projects.forEach((p) => {
+    projects.filter((p) => p.featured).forEach((p) => {
       (p.tech_stack || '').split(',').forEach((t) => {
         const trimmed = t.trim();
         if (trimmed) techs.add(trimmed);
@@ -41,13 +41,13 @@ export default function Projects() {
   }, [projects]);
 
   const allCategories = useMemo(() => {
-    return [...new Set(projects.map((p) => p.category).filter(Boolean))].sort();
+    return [...new Set(projects.filter((p) => p.featured).map((p) => p.category).filter(Boolean))].sort();
   }, [projects]);
 
   const filtered = useMemo(() => {
     return projects.filter((p) => {
-      // Show only featured unless filters are active
-      if (!search && !techFilter && !categoryFilter && !p.featured) return false;
+      // Only show featured projects
+      if (!p.featured) return false;
       if (search) {
         const s = search.toLowerCase();
         const titleMatch = (p.title || '').toLowerCase().includes(s) || JSON.stringify(p.title || '').toLowerCase().includes(s);
@@ -146,7 +146,7 @@ export default function Projects() {
                     {project.category}
                   </span>
                 )}
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">{tj(project.description)}</p>
+                {tj(project.description) && <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">{tj(project.description)}</p>}
 
                 {project.tech_stack && (
                   <div className="flex flex-wrap gap-2 mb-4">

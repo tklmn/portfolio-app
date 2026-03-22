@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.0] - 2026-03-22
+
+### Added
+- GitHub import duplicate detection — already-imported repos show "Imported" badge; import blocked for repos in trash with hint to restore
+- Robots/Crawling settings in admin — toggle search engine indexing and configure disallowed paths; changes apply immediately to `/robots.txt`
+- Seed defaults for about stats (`about_stat_1/2/3_value` and `_label`)
+
+### Fixed
+- Empty i18n fields displaying raw JSON — `useTranslateJson` now uses nullish coalescing (`??`) instead of logical OR (`||`)
+- Empty fields still rendering on public pages — about stats, bio, heading, description, company, hero fields, project description, blog excerpt, footer copyright, navbar logo, and contact info now hidden when empty instead of showing hardcoded fallback text
+- Non-featured projects visible through search/filter — public project section now strictly shows only featured projects
+- Resilient frontend serving — returns 503 instead of crashing when `index.html` is missing during a rebuild
+
+### Security
+- Honeypot field on contact form — silently discards bot submissions without revealing rejection
+
+---
+
 ## [1.1.0] - 2026-03-22
 
 ### Added

@@ -27,7 +27,12 @@ router.get('/', authenticateToken, (req, res) => {
 
 // POST create message (public - contact form)
 router.post('/', contactLimiter, (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email, message, website } = req.body;
+
+  // Honeypot — if filled, silently reject (bots only)
+  if (website) {
+    return res.status(201).json({ id: 0, message: 'Message sent successfully' });
+  }
 
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Name, email, and message are required' });

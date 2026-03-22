@@ -12,7 +12,7 @@ export default function Hero() {
   };
 
   const badgeEnabled = settings?.hero_badge_enabled !== 'false';
-  const badgeText = ts('hero_badge_text') || '5+ Years';
+  const badgeText = ts('hero_badge_text');
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -27,17 +27,23 @@ export default function Hero() {
             <p className="text-blue-500 dark:text-blue-400 font-medium mb-4 tracking-wide">
               {t('hero.greeting')}
             </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
-              {settings?.hero_name || 'John Developer'}
-            </h1>
-            <h2 className="text-xl sm:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300 mb-6">
-              <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                {ts('hero_title') || 'Full-Stack Web Developer'}
-              </span>
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-lg mb-8 leading-relaxed">
-              {ts('hero_subtitle') || 'I build exceptional digital experiences with modern technologies.'}
-            </p>
+            {settings?.hero_name && (
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+                {settings.hero_name}
+              </h1>
+            )}
+            {ts('hero_title') && (
+              <h2 className="text-xl sm:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300 mb-6">
+                <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+                  {ts('hero_title')}
+                </span>
+              </h2>
+            )}
+            {ts('hero_subtitle') && (
+              <p className="text-gray-600 dark:text-gray-400 text-lg max-w-lg mb-8 leading-relaxed">
+                {ts('hero_subtitle')}
+              </p>
+            )}
 
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
               <button
@@ -94,7 +100,7 @@ export default function Hero() {
                   )}
                 </div>
               </div>
-              {badgeEnabled && (
+              {badgeEnabled && badgeText && (
                 <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-sm font-bold rotate-12 shadow-lg">
                   {badgeText}
                 </div>

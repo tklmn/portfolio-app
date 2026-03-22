@@ -285,6 +285,13 @@ Enable or disable entire sections of the public site. When a section is disabled
 | `seo_keywords` | Comma-separated keywords |
 | `site_url` | Full URL of your site, e.g. `https://yourname.dev` — used for Open Graph, JSON-LD, and the sitemap |
 
+#### Robots / Crawling
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `robots_allow_indexing` | on | Allow search engines to index the site. When disabled, `robots.txt` returns `Disallow: /` |
+| `robots_disallow_paths` | `/admin` | Paths to block from crawling — one per line. `/admin` is always included |
+
 #### UI
 
 | Key | Default | Description |

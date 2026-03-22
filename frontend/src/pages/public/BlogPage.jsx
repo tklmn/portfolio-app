@@ -91,7 +91,7 @@ export default function BlogPage() {
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors mb-2">
                   {tj(post.title)}
                 </h2>
-                {post.excerpt && <p className="text-gray-600 dark:text-gray-400 mb-4">{tj(post.excerpt)}</p>}
+                {tj(post.excerpt) && <p className="text-gray-600 dark:text-gray-400 mb-4">{tj(post.excerpt)}</p>}
 
                 {/* Tags */}
                 {post.tagList && post.tagList.length > 0 && (
