@@ -58,7 +58,7 @@ function SortableRow({ skill, onEdit, onDelete }) {
         </div>
       </td>
       <td className="px-4 py-4 text-gray-500 dark:text-gray-400 hidden sm:table-cell">
-        <span className="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-800">{skill.category}</span>
+        {skill.category && <span className="px-2 py-0.5 text-xs rounded bg-gray-100 dark:bg-gray-800">{skill.category}</span>}
       </td>
       <td className="px-4 py-4">
         <div className="flex items-center gap-2">
