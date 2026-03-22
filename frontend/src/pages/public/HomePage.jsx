@@ -56,7 +56,7 @@ export default function HomePage() {
           sameAs={[
             settings?.social_github,
             settings?.social_linkedin,
-            settings?.social_twitter,
+            settings?.social_x,
           ].filter(Boolean)}
         />
       )}

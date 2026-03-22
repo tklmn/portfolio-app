@@ -9,7 +9,7 @@ export default function SEOHead({
   type = 'website',
   article,
 }) {
-  const siteTitle = title || 'Portfolio';
+  const siteTitle = title || '';
   const siteDescription = description || '';
 
   return (

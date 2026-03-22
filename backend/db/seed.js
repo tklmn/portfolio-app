@@ -188,6 +188,9 @@ const settings = {
   'github_username': '',
   'contact_email': 'hello@portfolio.com',
   'contact_location': 'San Francisco, CA',
+  // Blog display
+  'blog_show_date': 'true',
+  'blog_show_reading_time': 'true',
   // Robots
   'robots_allow_indexing': 'true',
   'robots_disallow_paths': '/admin',
