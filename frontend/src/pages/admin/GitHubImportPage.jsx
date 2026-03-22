@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { useToast } from '../../components/ui/Toast';
-import { FiStar, FiGitBranch, FiDownload, FiRefreshCw } from 'react-icons/fi';
+import { FiStar, FiGitBranch, FiDownload, FiRefreshCw, FiCheck, FiTrash2 } from 'react-icons/fi';
 
 export default function GitHubImportPage() {
   const [repos, setRepos] = useState([]);
@@ -30,6 +30,7 @@ export default function GitHubImportPage() {
     setImporting(repo.id);
     try {
       await api.post('/github/import', repo);
+      setRepos((prev) => prev.map((r) => r.id === repo.id ? { ...r, import_status: 'imported' } : r));
       addToast(`"${repo.name}" imported as project`, 'success');
     } catch (err) {
       addToast(err.response?.data?.error || 'Import failed', 'error');
@@ -81,14 +82,24 @@ export default function GitHubImportPage() {
                     {repo.description || 'No description'}
                   </p>
                 </div>
-                <button
-                  onClick={() => handleImport(repo)}
-                  disabled={importing === repo.id}
-                  className="flex-shrink-0 p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors disabled:opacity-50"
-                  title="Import as project"
-                >
-                  <FiDownload size={18} />
-                </button>
+                {repo.import_status === 'imported' ? (
+                  <span className="flex-shrink-0 p-2 text-green-500" title="Already imported">
+                    <FiCheck size={18} />
+                  </span>
+                ) : repo.import_status === 'trashed' ? (
+                  <span className="flex-shrink-0 p-2 text-yellow-500" title="In trash — restore from Trash page">
+                    <FiTrash2 size={18} />
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => handleImport(repo)}
+                    disabled={importing === repo.id}
+                    className="flex-shrink-0 p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors disabled:opacity-50"
+                    title="Import as project"
+                  >
+                    <FiDownload size={18} />
+                  </button>
+                )}
               </div>
 
               <div className="flex items-center gap-4 mt-3 text-xs text-gray-500 dark:text-gray-400">
