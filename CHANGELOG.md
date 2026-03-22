@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.1] - 2026-03-22
+
+### Added
+- **ManageListModal** — reusable modal for centralized CRUD on tags and categories (view, add, delete with usage count)
+- **"Manage Tags" button** on Blog Posts page — view all tags with post count, add new tags, delete unused tags
+- **"Manage Categories" button** on Skills page — view categories with skill count, add/delete categories
+- **"Manage Categories" button** on Projects page — same as skills, with project count
+
+---
+
 ## [1.4.0] - 2026-03-22
 
 ### Added
