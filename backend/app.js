@@ -30,7 +30,15 @@ if (!process.env.JWT_SECRET) {
 }
 const app = express();
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      'connect-src': ["'self'", 'https://api.iconify.design'],
+      'img-src': ["'self'", 'data:', 'https://api.iconify.design'],
+    },
+  },
+}));
 
 const allowedOrigins = process.env.CORS_ORIGIN?.split(',') || ['http://localhost:5173'];
 app.use(cors({
