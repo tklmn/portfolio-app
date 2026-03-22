@@ -11,6 +11,14 @@ const iconMap = {
   briefcase: 'feather:briefcase',
   award: 'feather:award',
   book: 'feather:book',
+  graduation: 'mdi:school-outline',
+  certificate: 'mdi:certificate-outline',
+  school: 'mdi:school',
+  rocket: 'feather:rocket',
+  code: 'feather:code',
+  globe: 'feather:globe',
+  heart: 'feather:heart',
+  star: 'feather:star',
 };
 
 export default function About() {
@@ -78,7 +86,9 @@ export default function About() {
                           <Icon icon={iconName} width={14} height={14} className="text-white" />
                         </div>
                         <div className="bg-white dark:bg-gray-800/50 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700/50 hover:shadow-md transition-shadow">
-                          <span className="text-xs font-medium text-blue-500 dark:text-blue-400">{item.year}</span>
+                          <span className="text-xs font-medium text-blue-500 dark:text-blue-400">
+                            {item.year}{item.is_current ? ` — ${t('about.present') || 'Present'}` : item.year_end ? ` — ${item.year_end}` : ''}
+                          </span>
                           <h4 className="text-base font-semibold text-gray-900 dark:text-white mt-1">{tj(item.title)}</h4>
                           {tj(item.company) && <p className="text-sm text-gray-500 dark:text-gray-400">{tj(item.company)}</p>}
                           {tj(item.description) && <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{tj(item.description)}</p>}

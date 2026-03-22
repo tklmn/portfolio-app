@@ -33,15 +33,15 @@ const timelineLimits = validateFields({ year: 50, title: 300, company: 300, desc
 
 // POST create timeline entry (admin)
 router.post('/timeline', authenticateToken, timelineLimits, (req, res) => {
-  const { year, title, company, description, icon, sort_order } = req.body;
+  const { year, year_end, is_current, title, company, description, icon, sort_order } = req.body;
   if (!year || !title || !company) {
     return res.status(400).json({ error: 'Year, title, and company are required' });
   }
 
   const db = getDb();
   const result = db.prepare(
-    'INSERT INTO timeline (year, title, company, description, icon, sort_order) VALUES (?, ?, ?, ?, ?, ?)'
-  ).run(year, title, company, description || '', icon || 'briefcase', sort_order || 0);
+    'INSERT INTO timeline (year, year_end, is_current, title, company, description, icon, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+  ).run(year, year_end || '', is_current ? 1 : 0, title, company, description || '', icon || 'briefcase', sort_order || 0);
 
   const entry = db.prepare('SELECT * FROM timeline WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json(entry);
@@ -49,15 +49,17 @@ router.post('/timeline', authenticateToken, timelineLimits, (req, res) => {
 
 // PUT update timeline entry (admin)
 router.put('/timeline/:id', validateId, authenticateToken, timelineLimits, (req, res) => {
-  const { year, title, company, description, icon, sort_order } = req.body;
+  const { year, year_end, is_current, title, company, description, icon, sort_order } = req.body;
   const db = getDb();
   const existing = db.prepare('SELECT * FROM timeline WHERE id = ?').get(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Timeline entry not found' });
 
   db.prepare(
-    'UPDATE timeline SET year = ?, title = ?, company = ?, description = ?, icon = ?, sort_order = ? WHERE id = ?'
+    'UPDATE timeline SET year = ?, year_end = ?, is_current = ?, title = ?, company = ?, description = ?, icon = ?, sort_order = ? WHERE id = ?'
   ).run(
     year || existing.year,
+    year_end ?? existing.year_end,
+    is_current !== undefined ? (is_current ? 1 : 0) : existing.is_current,
     title || existing.title,
     company || existing.company,
     description ?? existing.description,

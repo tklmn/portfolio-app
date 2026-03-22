@@ -267,13 +267,13 @@ db.prepare("UPDATE projects SET category = 'Developer Tool' WHERE title LIKE '%P
 
 // Seed timeline entries
 const insertTimeline = db.prepare(
-  'INSERT INTO timeline (year, title, company, description, icon, sort_order) VALUES (?, ?, ?, ?, ?, ?)'
+  'INSERT INTO timeline (year, year_end, is_current, title, company, description, icon, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
 );
 const timelineEntries = [
-  ['2024', '{"en":"Senior Full-Stack Developer","de":"Senior Full-Stack Entwickler"}', '{"en":"Tech Corp","de":"Tech Corp"}', '{"en":"Leading development of microservices architecture and mentoring junior developers.","de":"Leitung der Microservices-Architektur und Mentoring von Junior-Entwicklern."}', 'briefcase', 0],
-  ['2022', '{"en":"Full-Stack Developer","de":"Full-Stack Entwickler"}', '{"en":"StartupXYZ","de":"StartupXYZ"}', '{"en":"Built and shipped 3 major product features using React and Node.js.","de":"3 wichtige Produktfeatures mit React und Node.js entwickelt und ausgeliefert."}', 'briefcase', 0],
-  ['2021', '{"en":"AWS Certified Developer","de":"AWS Zertifizierter Entwickler"}', '{"en":"Amazon Web Services","de":"Amazon Web Services"}', '{"en":"Earned professional cloud developer certification.","de":"Professionelle Cloud-Entwickler-Zertifizierung erworben."}', 'award', 0],
-  ['2020', '{"en":"Computer Science Degree","de":"Informatik-Studium"}', '{"en":"University","de":"Universität"}', '{"en":"B.Sc. in Computer Science with focus on software engineering.","de":"B.Sc. Informatik mit Schwerpunkt Software Engineering."}', 'book', 0],
+  ['2023', '', 1, '{"en":"Senior Full-Stack Developer","de":"Senior Full-Stack Entwickler"}', '{"en":"Tech Corp","de":"Tech Corp"}', '{"en":"Leading development of microservices architecture and mentoring junior developers.","de":"Leitung der Microservices-Architektur und Mentoring von Junior-Entwicklern."}', 'briefcase', 0],
+  ['2021', '2023', 0, '{"en":"Full-Stack Developer","de":"Full-Stack Entwickler"}', '{"en":"StartupXYZ","de":"StartupXYZ"}', '{"en":"Built and shipped 3 major product features using React and Node.js.","de":"3 wichtige Produktfeatures mit React und Node.js entwickelt und ausgeliefert."}', 'briefcase', 0],
+  ['2021', '', 0, '{"en":"AWS Certified Developer","de":"AWS Zertifizierter Entwickler"}', '{"en":"Amazon Web Services","de":"Amazon Web Services"}', '{"en":"Earned professional cloud developer certification.","de":"Professionelle Cloud-Entwickler-Zertifizierung erworben."}', 'certificate', 0],
+  ['2017', '2020', 0, '{"en":"Computer Science Degree","de":"Informatik-Studium"}', '{"en":"University","de":"Universität"}', '{"en":"B.Sc. in Computer Science with focus on software engineering.","de":"B.Sc. Informatik mit Schwerpunkt Software Engineering."}', 'graduation', 0],
 ];
 for (const t of timelineEntries) {
   insertTimeline.run(...t);

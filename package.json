@@ -1,6 +1,6 @@
 {
   "name": "portfolio-app",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "private": true,
   "scripts": {
     "install:all": "npm install --prefix backend && npm install --prefix frontend",

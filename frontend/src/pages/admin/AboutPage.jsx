@@ -31,7 +31,9 @@ function SortableRow({ entry, onEdit, onDelete, dragEnabled }) {
           <span className="p-1 text-gray-200 dark:text-gray-700"><HiMiniArrowsUpDown size={16} /></span>
         )}
       </td>
-      <td className="px-4 py-4 font-medium text-blue-500">{entry.year}</td>
+      <td className="px-4 py-4 font-medium text-blue-500 whitespace-nowrap">
+        {entry.year}{entry.is_current ? ' — Present' : entry.year_end ? ` — ${entry.year_end}` : ''}
+      </td>
       <td className="px-4 py-4 font-medium text-gray-900 dark:text-white">{displayName(entry.title)}</td>
       <td className="px-4 py-4 text-gray-500 dark:text-gray-400 hidden sm:table-cell">{displayName(entry.company)}</td>
       <td className="px-4 py-4 text-right">
@@ -52,7 +54,7 @@ export default function AboutPage() {
   const [saving, setSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ year: '', title: '{}', company: '{}', description: '{}', icon: 'briefcase' });
+  const [form, setForm] = useState({ year: '', year_end: '', is_current: false, title: '{}', company: '{}', description: '{}', icon: 'briefcase' });
   const [formSaving, setFormSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const { addToast } = useToast();
@@ -108,7 +110,7 @@ export default function AboutPage() {
   // --- Timeline CRUD ---
   const openCreate = () => {
     setEditing(null);
-    setForm({ year: '', title: '{}', company: '{}', description: '{}', icon: 'briefcase' });
+    setForm({ year: '', year_end: '', is_current: false, title: '{}', company: '{}', description: '{}', icon: 'briefcase' });
     setShowModal(true);
   };
 
@@ -116,6 +118,8 @@ export default function AboutPage() {
     setEditing(entry.id);
     setForm({
       year: entry.year,
+      year_end: entry.year_end || '',
+      is_current: !!entry.is_current,
       title: entry.title || '{}',
       company: entry.company || '{}',
       description: entry.description || '{}',
@@ -268,19 +272,44 @@ export default function AboutPage() {
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600"><HiX size={20} /></button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Year *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Start *</label>
                   <input type="text" required value={form.year} onChange={(e) => setForm({ ...form, year: e.target.value })} placeholder="2024" className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Icon</label>
-                  <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm appearance-none">
-                    <option value="briefcase">Briefcase (Job)</option>
-                    <option value="award">Award (Certificate)</option>
-                    <option value="book">Book (Education)</option>
-                  </select>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">End</label>
+                  <input type="text" value={form.is_current ? '' : form.year_end} onChange={(e) => setForm({ ...form, year_end: e.target.value })} placeholder="2026" disabled={form.is_current} className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm disabled:opacity-40" />
                 </div>
+                <div className="flex items-end pb-1">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <button
+                      type="button"
+                      onClick={() => setForm({ ...form, is_current: !form.is_current, year_end: '' })}
+                      className={`relative w-9 h-5 rounded-full transition-colors ${form.is_current ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'}`}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${form.is_current ? 'translate-x-4' : 'translate-x-0'}`} />
+                    </button>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Current</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Icon</label>
+                <select value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm appearance-none">
+                  <option value="briefcase">Briefcase — Job / Position</option>
+                  <option value="graduation">Graduation — Degree / Study</option>
+                  <option value="certificate">Certificate — Certification</option>
+                  <option value="award">Award — Prize / Achievement</option>
+                  <option value="book">Book — Education / Course</option>
+                  <option value="school">School — School / Training</option>
+                  <option value="rocket">Rocket — Startup / Launch</option>
+                  <option value="code">Code — Development / Technical</option>
+                  <option value="globe">Globe — Remote / International</option>
+                  <option value="heart">Heart — Volunteering / Social</option>
+                  <option value="star">Star — Highlight / Special</option>
+                </select>
               </div>
 
               <div>

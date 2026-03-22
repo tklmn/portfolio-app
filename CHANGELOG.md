@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.0] - 2026-03-22
+
+### Added
+- **Timeline date ranges** — each entry now has a start year, optional end year, and "Current" toggle
+- **"Current" toggle** — when active, the frontend displays "Start — Present" (EN) / "Start — Heute" (DE) instead of an end year
+- **Extended timeline icons** — 11 icon types: Briefcase (Job), Graduation (Degree), Certificate, Award, Book (Course), School (Training), Rocket (Startup), Code (Technical), Globe (International), Heart (Volunteering), Star (Highlight)
+- i18n key `about.present` for EN ("Present") and DE ("Heute")
+
+### Changed
+- Timeline admin table shows date range (e.g. "2021 — 2023" or "2023 — Present") instead of just start year
+- Seed timeline entries updated with realistic date ranges and new icon types (`certificate`, `graduation`)
+- Backend `year_end` and `is_current` columns added via migration (safe for existing databases)
+
+---
+
 ## [1.4.1] - 2026-03-22
 
 ### Added

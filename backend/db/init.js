@@ -116,6 +116,8 @@ export function initDb() {
     "ALTER TABLE skills ADD COLUMN deleted_at DATETIME DEFAULT NULL",
     "ALTER TABLE messages ADD COLUMN deleted_at DATETIME DEFAULT NULL",
     "ALTER TABLE posts ADD COLUMN deleted_at DATETIME DEFAULT NULL",
+    "ALTER TABLE timeline ADD COLUMN year_end TEXT DEFAULT ''",
+    "ALTER TABLE timeline ADD COLUMN is_current INTEGER DEFAULT 0",
   ];
 
   for (const sql of migrations) {
