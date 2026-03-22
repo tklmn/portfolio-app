@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { useToast } from '../../components/ui/Toast';
-import { FiStar, FiGitBranch, FiDownload, FiRefreshCw, FiCheck, FiTrash2 } from 'react-icons/fi';
+import { FiStar, FiGitBranch, FiDownload, FiRefreshCw, FiTrash2 } from 'react-icons/fi';
 
 export default function GitHubImportPage() {
   const [repos, setRepos] = useState([]);
@@ -109,10 +109,6 @@ export default function GitHubImportPage() {
                   >
                     <FiTrash2 size={18} />
                   </button>
-                ) : repo.import_status === 'trashed' ? (
-                  <span className="flex-shrink-0 p-2 text-gray-400" title="In trash">
-                    <FiCheck size={18} />
-                  </span>
                 ) : (
                   <button
                     onClick={() => handleImport(repo)}

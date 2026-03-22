@@ -31,12 +31,9 @@ router.get('/repos', authenticateToken, async (req, res) => {
     }
 
     const repos = await response.json();
-    // Check which repos are already imported (including trash)
-    const imported = db.prepare("SELECT github_url, deleted_at FROM projects WHERE github_url IS NOT NULL AND github_url != ''").all();
-    const importedMap = {};
-    for (const row of imported) {
-      importedMap[row.github_url] = row.deleted_at ? 'trashed' : 'imported';
-    }
+    // Check which repos are actively imported (not trashed)
+    const imported = db.prepare("SELECT github_url FROM projects WHERE github_url IS NOT NULL AND github_url != '' AND deleted_at IS NULL").all();
+    const importedSet = new Set(imported.map((r) => r.github_url));
 
     const simplified = repos.map((r) => ({
       id: r.id,
@@ -50,7 +47,7 @@ router.get('/repos', authenticateToken, async (req, res) => {
       forks_count: r.forks_count,
       updated_at: r.updated_at,
       topics: r.topics || [],
-      import_status: importedMap[r.html_url] || null,
+      import_status: importedSet.has(r.html_url) ? 'imported' : null,
     }));
 
     res.json(simplified);
@@ -68,11 +65,10 @@ router.post('/import', authenticateToken, async (req, res) => {
 
   const db = getDb();
 
-  // Check if project already exists with this GitHub URL (including trash)
-  const existing = db.prepare('SELECT id, deleted_at FROM projects WHERE github_url = ?').get(html_url);
+  // Check if project already exists with this GitHub URL (only active, not trashed)
+  const existing = db.prepare('SELECT id FROM projects WHERE github_url = ? AND deleted_at IS NULL').get(html_url);
   if (existing) {
-    const hint = existing.deleted_at ? ' (it is in the trash — restore it from there)' : '';
-    return res.status(400).json({ error: `This repository has already been imported${hint}` });
+    return res.status(400).json({ error: 'This repository has already been imported' });
   }
 
   const techStack = topics && topics.length > 0
