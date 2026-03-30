@@ -125,14 +125,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.1] - 2026-03-30
-
-### Fixed
-
-- Resolve dependency conflict: upgrade `@tailwindcss/vite` from `^4.2.1` to `^4.2.2` to support Vite 8
-
----
-
 ## [1.0.0] - 2026-03-17
 
 ### Added
