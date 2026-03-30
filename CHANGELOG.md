@@ -7,13 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-- Admin skills table now shows iconify icon next to skill name
-- Active navigation state with scroll-based section detection on public site
-- Dark mode: active and hover nav links now use white text (public + admin)
+---
 
-### Removed
-- Demo credentials hint from admin login page
+## [1.5.1] - 2026-03-30
+
+### Fixed
+
+- Resolve dependency conflict: upgrade `@tailwindcss/vite` from `^4.2.1` to `^4.2.2` to support Vite 8
 
 ---
 
@@ -26,9 +26,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - i18n key `about.present` for EN ("Present") and DE ("Heute")
 
 ### Changed
+- Admin skills table now shows iconify icon next to skill name
+- Active navigation state with scroll-based section detection on public site
+- Dark mode: active and hover nav links now use white text (public + admin)
 - Timeline admin table shows date range (e.g. "2021 — 2023" or "2023 — Present") instead of just start year
 - Seed timeline entries updated with realistic date ranges and new icon types (`certificate`, `graduation`)
 - Backend `year_end` and `is_current` columns added via migration (safe for existing databases)
+
+### Removed
+- Demo credentials hint from admin login page
 
 ---
 
